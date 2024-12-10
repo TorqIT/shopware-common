@@ -5,12 +5,12 @@ This repository (plugin) provides a centralized location for commonly reused cod
 ---
 
 ## Adding a Submodule to an existing repository
-Run the following command to create the torqcommon submodule in an existing Showpare repo.
+Run the following command to create the torqcommon submodule in an existing Showpare repo, then perform the steps in **Submodule Installation**.
 
 `git submodule add -f https://github.com/TorqIT/shopware-torq-common src/custom/plugins/torqcommon`
 
 
-## Submodule Initialization
+## Updating Submodule 
 After cloning your Git repository for the first time, pull down the submodule code by executing the following commands.
 
 ```bash
