@@ -8,7 +8,7 @@
         "shopware/core": "~6.6.0"
     },
     "extra": {
-        "shopware-plugin-class": "Torq\\Shopware\\Common\\ShopwareCommon",
+        "shopware-plugin-class": "Torq\\Shopware\\Common\\TorqShopwareCommon",
         "label": {
             "de-DE": "Torq Shopware Common",
             "en-GB": "Torq Shopware Common"

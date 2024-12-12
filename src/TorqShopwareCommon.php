@@ -9,7 +9,7 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 
-class ShopwareCommon extends Plugin
+class TorqShopwareCommon extends Plugin
 {
     public function install(InstallContext $installContext): void
     {
