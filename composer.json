@@ -1,27 +1,27 @@
 {
-    "name": "torq/torqcommon",
-    "description": "torq/torqcommon",
+    "name": "torq/shopwarecommon",
+    "description": "torq/shopwarecommon",
     "type": "shopware-platform-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "require": {
         "shopware/core": "~6.6.0"
     },
     "extra": {
-        "shopware-plugin-class": "Torq\\TorqCommon",
+        "shopware-plugin-class": "Torq\\Shopware\\Common\\ShopwareCommon",
         "label": {
-            "de-DE": "Torq Common",
-            "en-GB": "Torq Common"
+            "de-DE": "Torq Shopware Common",
+            "en-GB": "Torq Shopware Common"
         }
     },
     "autoload": {
         "psr-4": {
-            "Torq\\": "src/"
+            "Torq\\Shopware\\Common\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Torq\\Tests\\": "tests/"
+            "Torq\\Shopware\\Common\\Tests\\": "tests/"
         }
     }
 }

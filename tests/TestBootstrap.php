@@ -4,9 +4,9 @@ use Shopware\Core\TestBootstrapper;
 
 $loader = (new TestBootstrapper())
     ->addCallingPlugin()
-    ->addActivePlugins('TorqCommon')
+    ->addActivePlugins('ShopwareCommon')
     ->setForceInstallPlugins(true)
     ->bootstrap()
     ->getClassLoader();
 
-$loader->addPsr4('Torq\\Tests\\', __DIR__);
+$loader->addPsr4('Torq\\Shopware\\Common\\Tests\\', __DIR__);

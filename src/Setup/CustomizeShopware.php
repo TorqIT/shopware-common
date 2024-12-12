@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Torq\Setup;
+namespace Torq\Shopware\Common\Setup;
 
 use Exception;
 use Shopware\Core\Defaults;

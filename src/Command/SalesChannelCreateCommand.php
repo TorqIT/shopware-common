@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Torq\Command;
+namespace Torq\Shopware\Common\Command;
 
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;

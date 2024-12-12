@@ -6,7 +6,7 @@
 
     <services>
 
-        <service id="Torq\Command\SalesChannelCreateCommand">
+        <service id="Torq\Shopware\Common\Command\SalesChannelCreateCommand">
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
             <argument type="service" id="sales_channel.repository"/>
             <argument type="service" id="payment_method.repository"/>
