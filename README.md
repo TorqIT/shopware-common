@@ -57,7 +57,7 @@ torq_shopware_common:
     secret: 
 ```
 
-_Maintain this config structure example as additional config values are added
+_Maintain this config structure example as additional config values are added_
 
 
 ### Encryption
