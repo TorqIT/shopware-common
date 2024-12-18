@@ -6,6 +6,10 @@
 
     <services>
 
+        <service id="Torq\Shopware\Common\Security\Encryption\EncryptionHandler">
+            <argument>%torq_shopware_common.encryption.secret%</argument>
+        </service>
+
         <service id="Torq\Shopware\Common\Command\SalesChannelCreateCommand">
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
             <argument type="service" id="sales_channel.repository"/>
@@ -15,6 +19,11 @@
             <argument type="service" id="category.repository"/>
             <argument type="service" id="snippet_set.repository"/>
             
+            <tag name="console.command" />
+        </service>
+
+        <service id="Torq\Shopware\Common\Command\TestEncryptionCommand">
+            <argument type="service" id="Torq\Shopware\Common\Security\Encryption\EncryptionHandler"/>
             <tag name="console.command" />
         </service>
 
