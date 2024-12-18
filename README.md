@@ -60,7 +60,7 @@ torq_shopware_common:
 _Maintain this config structure example as additional config values are added
 
 
-### Encrpytion
+### Encryption
 
 Presently we're using the `defuse/php-encryption` library for handling encryption, and our wrapper class is `TorqShopwareCommon/src/Security/Encryption/EncryptionHandler.php`.
 
