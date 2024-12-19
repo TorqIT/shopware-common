@@ -43,3 +43,41 @@ To install the submodule and set up the container, follow these steps:
    ```
 
 > **Note**: The `composer require` command will add the **shopwarecommon** plugin as a dependency and update the `composer.json` and `composer.lock` files accordingly.  It will also add the necessary files and folders to the **vendor** directory.
+
+
+## Configuration
+
+You can configure this plugin by adding a `torq_shopware_common.yaml` config file to the `src/config/packages` directory inside of the root Shopware project you're working on.
+
+The basic structure of this file would be:
+
+```
+torq_shopware_common:
+  encryption:
+    secret: 
+```
+
+_Maintain this config structure example as additional config values are added_
+
+
+### Encryption
+
+Presently we're using the `defuse/php-encryption` library for handling encryption, and our wrapper class is `TorqShopwareCommon/src/Security/Encryption/EncryptionHandler.php`.
+
+In order to use this plugin successfully you'll need to ensure that a value is set for secret in:
+
+```
+torq_shopware_common:
+  encryption:
+    secret: '%env(TORQ_SHOPWARE_COMMON_ENCRYPTION_SECRET)%'
+```
+
+This pattern has the key being read from an environment variable. The value of the secret can be generated using the included key generation tool available inside of all PHP containers at `vendor/bin/generate-defuse-key`.
+
+**YOU MUST FOLLOW THESE RULES WHEN MANAGING KEYS:**
+
+1. NEVER PUT THE ENCRYPTION KEY DIRECTLY INSIDE THE CONFIG FILE
+
+2. NEVER COMMIT AN ENCRYPTION KEY TO A REPOSITORY
+
+3. NEVER USE THE SAME ENCRYPTION KEY IN DEV, TEST or PROD ENVIRONMENTS.
