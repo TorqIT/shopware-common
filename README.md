@@ -64,12 +64,10 @@ _Maintain this config structure example as additional config values are added_
 
 Presently we're using the `defuse/php-encryption` library for handling encryption, and our wrapper class is `TorqShopwareCommon/src/Security/Encryption/EncryptionHandler.php`.
 
-In order to use this plugin successfully you'll need to ensure that a value is set for secret in:
+In order to use this plugin successfully you'll need to create a secret file called `torq-shopware-common-encryption-secret` and update the parameters section of src/config/services.yaml to include:
 
 ```
-torq_shopware_common:
-  encryption:
-    secret: '%env(TORQ_SHOPWARE_COMMON_ENCRYPTION_SECRET)%'
+env(TORQ_SHOPWARE_COMMON_ENCRYPTION_SECRET_FILE): '/run/secrets/torq-shopware-common-encryption-secret'
 ```
 
 This pattern has the key being read from an environment variable. The value of the secret can be generated using the included key generation tool available inside of all PHP containers at `vendor/bin/generate-defuse-key`.
