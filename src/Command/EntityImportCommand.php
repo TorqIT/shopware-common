@@ -52,7 +52,7 @@ class EntityImportCommand extends Command
                     $io->write("Success importing entity - " . $entity, true);
                 }catch(Throwable $e){
                     //svar_dump($data);
-                    print_r($data);
+                    //print_r($data);
                     throw $e;
                 }
             }catch(Throwable $e){

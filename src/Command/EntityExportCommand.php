@@ -46,6 +46,7 @@ class EntityExportCommand extends Command
             $entity = $entityConfig["entity"];
             $ids = array_key_exists("ids",$entityConfig) ? $entityConfig["ids"] : [];
             $associations = array_key_exists("associations",$entityConfig) ? $entityConfig["associations"] : [];
+            $excludeFields = array_key_exists("excludeFields",$entityConfig) ? $entityConfig["excludeFields"] : [];
             $extraCriteria = array_key_exists("criteria",$entityConfig) ? $entityConfig["criteria"] : [];
             $repo = $this->definitionRegistry->getRepository($entity);
 
@@ -56,7 +57,7 @@ class EntityExportCommand extends Command
 
             $elements = $repo->search($criteria, Context::createDefaultContext())->getEntities()->getElements();  
 
-            $jsonOutput = $this->processUnwritableFields($repo,$elements,$associations);
+            $jsonOutput = $this->processUnwritableFields($repo,$elements,$associations,$excludeFields);
 
             $file = '/var/www/html/custom/data/' . $entity . '.json';
             // Write JSON data to the file, overwriting if it already exists
@@ -71,6 +72,7 @@ class EntityExportCommand extends Command
         foreach($associations as $association){
             $criteria->addAssociation($association);
         }
+        return $criteria;
     }
 
     private function addCriteria($criteria, $extraCriteria){
@@ -87,13 +89,14 @@ class EntityExportCommand extends Command
         return $criteria;
     }
 
-    private function processUnwritableFields($repo, $elements, $associations) {
+    private function processUnwritableFields($repo, $elements, $associations, $excludeFields) {
 
         $json = json_decode(json_encode($elements, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION | JSON_INVALID_UTF8_SUBSTITUTE | JSON_PARTIAL_OUTPUT_ON_ERROR),true);
 
         $fields = $repo->getDefinition()->getFields();            
         //Process unwriteable fields at the top level
         $unwritableFields = [];
+        $unwritableFields = array_merge($unwritableFields, $excludeFields);
         foreach($fields as $field){
             if($field->getFlag(WriteProtected::class) || $field instanceof ManyToOneAssociationField){
                 $unwritableFields[] = $field->getPropertyName();
