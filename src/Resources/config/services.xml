@@ -7,7 +7,7 @@
     <services>
 
         <service id="Torq\Shopware\Common\Security\Encryption\EncryptionHandler">
-            <argument>%torq_shopware_common.encryption.secret%</argument>
+            <argument>%env(default::file:TORQ_SHOPWARE_COMMON_ENCRYPTION_SECRET_FILE)%</argument>
         </service>
 
         <service id="Torq\Shopware\Common\Command\SalesChannelCreateCommand">
