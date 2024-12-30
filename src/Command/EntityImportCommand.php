@@ -2,18 +2,13 @@
 
 namespace Torq\Shopware\Common\Command;
 
-use Exception;
 use Throwable;
 use Shopware\Core\Framework\Context;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 
 class EntityImportCommand extends Command
 {
@@ -25,13 +20,14 @@ class EntityImportCommand extends Command
     public function configure()
     {
         $this->setName('torq:entity-importer')
-            ->setDescription('Import entities');
+            ->setDescription('Import entities based on the configuration in _config.json');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
+        //Retrieve the configuration
         $configFile = '/var/www/html/custom/data/_config.json';        
         try{
             $config = json_decode(file_get_contents($configFile),true);            
@@ -40,6 +36,7 @@ class EntityImportCommand extends Command
             return Command::FAILURE;
         }   
         
+        //Loop each entity configuration
         foreach($config as $entityConfig){
             $entity = $entityConfig["entity"];
             $repo = $this->definitionRegistry->getRepository($entity);
@@ -61,5 +58,4 @@ class EntityImportCommand extends Command
         }
         return Command::SUCCESS;
     }
-
   }

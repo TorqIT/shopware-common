@@ -2,20 +2,23 @@
 
 namespace Torq\Shopware\Common\Command;
 
+use InvalidArgumentException;
+use Exception;
 use Throwable;
 use Shopware\Core\Framework\Context;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Shopware\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
+use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class EntityExportCommand extends Command
 {
@@ -27,13 +30,14 @@ class EntityExportCommand extends Command
     public function configure()
     {
         $this->setName('torq:entity-exporter')
-            ->setDescription('Export entities');
+            ->setDescription('Export entities based on the configuration in _config.json');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         
+        //Retrieve the configuration
         $configFile = '/var/www/html/custom/data/_config.json';        
         try{
             $config = json_decode(file_get_contents($configFile),true);            
@@ -42,15 +46,19 @@ class EntityExportCommand extends Command
             return Command::FAILURE;
         }            
 
+        //Loop each entity configuration
         foreach($config as $entityConfig){
             $entity = $entityConfig["entity"];
+            //The search is currently an "AND" between the ids and the extraCriteria section
             $ids = array_key_exists("ids",$entityConfig) ? $entityConfig["ids"] : [];
-            $associations = array_key_exists("associations",$entityConfig) ? $entityConfig["associations"] : [];
-            $excludeFields = array_key_exists("excludeFields",$entityConfig) ? $entityConfig["excludeFields"] : [];
             $extraCriteria = array_key_exists("criteria",$entityConfig) ? $entityConfig["criteria"] : [];
+            //add any extra data to the entity
+            $associations = array_key_exists("associations",$entityConfig) ? $entityConfig["associations"] : [];
+            //remove any extra fields that we don't want
+            $excludeFields = array_key_exists("excludeFields",$entityConfig) ? $entityConfig["excludeFields"] : [];
             $repo = $this->definitionRegistry->getRepository($entity);
 
-            //if ids are set, add to the criteria plus add any associations and extra search criteria
+            //if ids are set, add to the criteria and then add any associations and extra search criteria
             $criteria = empty($ids) ? new Criteria() : new Criteria($ids);
             $criteria = $this->addAssociations($criteria, $associations);    
             $criteria = $this->addCriteria($criteria, $extraCriteria);
@@ -80,6 +88,7 @@ class EntityExportCommand extends Command
             $type = $crit["type"];
             $field = $crit["field"];
             $values = $crit["values"]; //array
+            //can add more types in the future
             switch($type){
                 case 'EqualsAny':
                     $criteria->addFilter(new EqualsAnyFilter($field,$values));
@@ -89,20 +98,38 @@ class EntityExportCommand extends Command
         return $criteria;
     }
 
+    /**
+     * Loops through the json and removes any fields that are unwriteable back to shopware. 
+     * All based on the shopware entity configuration.
+     * 
+     * @param mixed $repo 
+     * @param mixed $elements 
+     * @param mixed $associations 
+     * @param mixed $excludeFields 
+     * @return string|false 
+     * @throws DefinitionNotFoundException 
+     * @throws ServiceCircularReferenceException 
+     * @throws ServiceNotFoundException 
+     * @throws InvalidArgumentException 
+     * @throws Exception 
+     */
     private function processUnwritableFields($repo, $elements, $associations, $excludeFields) {
 
         $json = json_decode(json_encode($elements, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION | JSON_INVALID_UTF8_SUBSTITUTE | JSON_PARTIAL_OUTPUT_ON_ERROR),true);
 
+        //Process the top level entity fields
         $fields = $repo->getDefinition()->getFields();            
-        //Process unwriteable fields at the top level
         $unwritableFields = [];
-        $unwritableFields = array_merge($unwritableFields, $excludeFields);
         foreach($fields as $field){
             if($field->getFlag(WriteProtected::class) || $field instanceof ManyToOneAssociationField){
                 $unwritableFields[] = $field->getPropertyName();
             }
         }
-        //Process unwriteable fields for the associations
+
+        //add in any fields from the configuration that should be excluded
+        $unwritableFields = array_merge($unwritableFields, $excludeFields);
+
+        //Process unwriteable fields for the defined associations
         foreach($associations as $association){
             $entityAssoc = explode(".",$association);
             $entityDef = $repo->getDefinition(); // start with the main def
@@ -129,9 +156,9 @@ class EntityExportCommand extends Command
             foreach($unwritableFields as $value){
                 $values = explode(".",$value);//children removals will have at least one "." in the value
                 if(count($values) == 1){
-                    unset($element[$value]);
+                    unset($element[$value]);// top level entity removal
                 }else{
-                    $element = $this->removeKeyFromArray($values, $element);
+                    $element = $this->removeKeyFromArray($values, $element); //child entity removal
                 }
             }
             $arrayElements[] = $element;
