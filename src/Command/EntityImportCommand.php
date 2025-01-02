@@ -5,6 +5,7 @@ namespace Torq\Shopware\Common\Command;
 use Throwable;
 use Shopware\Core\Framework\Context;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +21,9 @@ class EntityImportCommand extends Command
     public function configure()
     {
         $this->setName('torq:entity-importer')
-            ->setDescription('Import entities based on the configuration in _config.json');
+            ->setDescription('Import entities based on the configuration in _config.json')
+            ->addOption('configFile', null, InputOption::VALUE_REQUIRED, 'Config file for the import','/var/www/html/custom/data/_config.json')
+            ->addOption('dataFolder', null, InputOption::VALUE_REQUIRED, 'Folder to import the data from','/var/www/html/custom/data/');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -28,7 +31,7 @@ class EntityImportCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         //Retrieve the configuration
-        $configFile = '/var/www/html/custom/data/_config.json';        
+        $configFile = $input->getOption('configFile');        
         try{
             $config = json_decode(file_get_contents($configFile),true);            
         }catch(Throwable $e){
@@ -41,7 +44,7 @@ class EntityImportCommand extends Command
             $entity = $entityConfig["entity"];
             $repo = $this->definitionRegistry->getRepository($entity);
             
-            $file = '/var/www/html/custom/data/' . $entity . '.json';        
+            $file = $input->getOption('dataFolder') . $entity . '.json';        
             try{
                 $data = json_decode(file_get_contents($file),true);
                 try{

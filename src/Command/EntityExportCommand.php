@@ -2,23 +2,24 @@
 
 namespace Torq\Shopware\Common\Command;
 
-use InvalidArgumentException;
 use Exception;
 use Throwable;
+use InvalidArgumentException;
 use Shopware\Core\Framework\Context;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Shopware\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Shopware\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 
 class EntityExportCommand extends Command
 {
@@ -30,7 +31,9 @@ class EntityExportCommand extends Command
     public function configure()
     {
         $this->setName('torq:entity-exporter')
-            ->setDescription('Export entities based on the configuration in _config.json');
+            ->setDescription('Export entities based on the configuration in _config.json')            
+            ->addOption('configFile', null, InputOption::VALUE_REQUIRED, 'Config file for the export','/var/www/html/custom/data/_config.json')
+            ->addOption('dataFolder', null, InputOption::VALUE_REQUIRED, 'Folder to export the data to','/var/www/html/custom/data/');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -38,7 +41,7 @@ class EntityExportCommand extends Command
         $io = new SymfonyStyle($input, $output);
         
         //Retrieve the configuration
-        $configFile = '/var/www/html/custom/data/_config.json';        
+        $configFile = $input->getOption('configFile');        
         try{
             $config = json_decode(file_get_contents($configFile),true);            
         }catch(Throwable $e){
@@ -67,7 +70,7 @@ class EntityExportCommand extends Command
 
             $jsonOutput = $this->processUnwritableFields($repo,$elements,$associations,$excludeFields);
 
-            $file = '/var/www/html/custom/data/' . $entity . '.json';
+            $file = $input->getOption('dataFolder') . $entity . '.json';
             // Write JSON data to the file, overwriting if it already exists
             file_put_contents($file, $jsonOutput);
 
