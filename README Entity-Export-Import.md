@@ -6,6 +6,7 @@ These commands can be used to export and then import shopware data based on a co
 `bin/console torq:entity-exporter`
 
 Both commands use default values for the config json and the data folder location but can be overridden by using the following options:
+
 --configFile=CONFIGFILE  Config file for the export [default: "/var/www/html/custom/data/_config.json"]
 --dataFolder=DATAFOLDER  Folder to export the data to [default: "/var/www/html/custom/data/"]
 
