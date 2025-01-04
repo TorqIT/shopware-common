@@ -22,6 +22,18 @@
             <tag name="console.command" />
         </service>
 
+        <service id="Torq\Shopware\Common\Command\EntityExportCommand">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>         
+               
+            <tag name="console.command" />
+        </service> 
+
+        <service id="Torq\Shopware\Common\Command\EntityImportCommand">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>         
+               
+            <tag name="console.command" />
+        </service> 
+
         <service id="Torq\Shopware\Common\Command\TestEncryptionCommand">
             <argument type="service" id="Torq\Shopware\Common\Security\Encryption\EncryptionHandler"/>
             <tag name="console.command" />
