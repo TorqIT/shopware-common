@@ -45,20 +45,6 @@ To install the submodule and set up the container, follow these steps:
 > **Note**: The `composer require` command will add the **shopwarecommon** plugin as a dependency and update the `composer.json` and `composer.lock` files accordingly.  It will also add the necessary files and folders to the **vendor** directory.
 
 
-## Configuration
-
-You can configure this plugin by adding a `torq_shopware_common.yaml` config file to the `src/config/packages` directory inside of the root Shopware project you're working on.
-
-The basic structure of this file would be:
-
-```
-torq_shopware_common:
-  encryption:
-    secret: 
-```
-
-_Maintain this config structure example as additional config values are added_
-
 
 ### Encryption
 
