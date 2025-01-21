@@ -1,0 +1,18 @@
+{
+  "sw-cms": {
+    "blocks": {
+      "html": {
+        "customPage": {
+          "label": "Custom Page"
+        }
+      }
+    },
+    "elements": {
+      "customPage": {
+        "label": "Custom Page",
+        "labelRouteName": "Route Name",
+        "labelRouteParameters": "Route Parameters"
+      }
+    }
+  }
+}

@@ -32,5 +32,14 @@
             <argument type="service" id="Torq\Shopware\Common\Security\Encryption\EncryptionHandler"/>
         </service>
 
+        <service id="fragment.renderer.inline" class="Torq\Shopware\Common\Fragment\ShopwareInlineFragmentRenderer">
+            <argument type="service" id="http_kernel"/>
+            <argument type="service" id="event_dispatcher"/>
+            <call method="setFragmentPath">
+                <argument>%fragment.path%</argument>
+            </call>
+            <tag name="kernel.fragment_renderer" alias="inline"/>
+        </service>
+
     </services>
 </container>

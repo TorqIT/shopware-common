@@ -1,0 +1,9 @@
+{% block element_custom_page %}
+
+    {% set rPath = path(element.config.routeName.value) %}
+    {% set rParams = element.config.routeParam.value %}
+
+    {# TODO - Validate and pass in params to the renderer#}
+    {{ render( rPath ) }}
+    
+{% endblock %}
