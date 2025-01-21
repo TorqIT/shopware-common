@@ -1,0 +1,21 @@
+{% block sw_cms_block_custom_page %}
+
+	<div class="sw-cms-block-custom-page">
+
+        {% block sw_cms_block_custom_page_slot_heading %}
+            {% set element = block.slots.getSlot('heading') %}
+            {% if element %}
+                {% sw_include '@Storefront/storefront/element/cms-element-' ~ element.type ~ '.html.twig' ignore missing %}
+            {% endif %}
+        {% endblock %}
+
+        {% block sw_cms_block_custom_page_slot_datatable %}
+            {% set element = block.slots.getSlot('datatable') %}
+            {% if element %}
+                {% sw_include '@Storefront/storefront/element/cms-element-' ~ element.type ~ '.html.twig' ignore missing %}
+            {% endif %}
+        {% endblock %}
+
+	</div>
+
+{% endblock %}

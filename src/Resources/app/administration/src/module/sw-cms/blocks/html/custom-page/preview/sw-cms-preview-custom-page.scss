@@ -1,0 +1,14 @@
+.sw-cms-preview-custom-page {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    // TYPOGRAPHY
+    h2,
+    p {
+        text-transform: uppercase;
+        margin-bottom: 0;
+    }
+}

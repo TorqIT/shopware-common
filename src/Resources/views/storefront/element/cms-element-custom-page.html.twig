@@ -1,0 +1,11 @@
+{% block element_custom_page %}
+
+    {% set rPath = path(element.config.routeName.value) %}
+    {% set rParams = element.config.routeParam.value %}
+
+    {#  TODO - Validate and pass in params to the renderer
+        Problem - The params passed into render here never makle it to the subrequest - Breakpoint the ShopwareInlinefragmentRenderer class to see.
+    #}
+    {{ render( rPath ) }}
+    
+{% endblock %}
