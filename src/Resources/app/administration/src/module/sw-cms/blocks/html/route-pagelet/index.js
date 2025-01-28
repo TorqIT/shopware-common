@@ -2,11 +2,11 @@ import './component';
 import './preview';
 
 Shopware.Service('cmsService').registerCmsBlock({
-    name: 'custom-page',
+    name: 'route-pagelet',
     category: 'html',
-    label: 'sw-cms.blocks.html.customPage.label',
-    component: 'sw-cms-block-custom-page',
-    previewComponent: 'sw-cms-preview-custom-page',
+    label: 'sw-cms.blocks.html.routePagelet.label',
+    component: 'sw-cms-block-route-pagelet',
+    previewComponent: 'sw-cms-preview-route-pagelet',
     defaultConfig: {
         marginBottom: '20px',
         marginTop: '20px',
@@ -15,11 +15,8 @@ Shopware.Service('cmsService').registerCmsBlock({
         sizingMode: 'full_width',
     },
     slots: {
-        heading: {
-            type: 'text'
-        },
-        datatable: {
-            type: 'custom-page'
+        pagelet: {
+            type: 'route-pagelet'
         }
     }
 });

@@ -3,11 +3,11 @@ import './config';
 import './preview';
 
 Shopware.Service('cmsService').registerCmsElement({
-    name: 'custom-page',
-    label: 'sw-cms.elements.customPage.label',
-    component: 'sw-cms-el-custom-page',
-    configComponent: 'sw-cms-el-config-custom-page',
-    previewComponent: 'sw-cms-el-preview-custom-page',
+    name: 'route-pagelet',
+    label: 'sw-cms.elements.routePagelet.label',
+    component: 'sw-cms-el-route-pagelet',
+    configComponent: 'sw-cms-el-config-route-pagelet',
+    previewComponent: 'sw-cms-el-preview-route-pagelet',
     removable: false,
     hidden: false,
     defaultConfig: {

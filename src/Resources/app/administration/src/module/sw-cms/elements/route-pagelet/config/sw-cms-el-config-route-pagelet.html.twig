@@ -1,11 +1,11 @@
-{% block sw_cms_element_custom_page_config %}
-	<div class="sw-cms-el-config-custom-page">
-		{% block sw_cms_element_custom_page_config %}
-			<sw-tabs position-identifier="sw-cms-element-config-custom_page" class="sw-cms-el-config-text__tabs" default-item="settings">
+{% block sw_cms_element_route_pagelet_config %}
+	<div class="sw-cms-el-config-route-pagelet">
+		{% block sw_cms_element_route_pagelet_config %}
+			<sw-tabs position-identifier="sw-cms-element-config-route_pagelet" class="sw-cms-el-config-text__tabs" default-item="settings">
 
                 <template
 					#default="{ active }">
-					{% block sw_cms_element_custom_page_config_tab_options %}
+					{% block sw_cms_element_route_pagelet_config_tab_options %}
 						<sw-tabs-item :title="$tc('sw-cms.elements.general.config.tab.settings')" name="settings" :active-tab="active">
 							{{ $tc('sw-cms.elements.general.config.tab.settings') }}
 						</sw-tabs-item>
@@ -13,21 +13,20 @@
 				</template>
 
                 <template #content="{ active }">
-                    {% block sw_cms_element_custom_page_config_settings %}
+                    {% block sw_cms_element_route_pagelet_config_settings %}
                         <sw-container v-if="active === 'settings'" class="sw-cms-el-config-text__tab-settings">
                             {% block sw_cms_el_text_config_settings_routename %}
                                 <sw-text-field  name="routeName" 
                                                 v-model:value="element.config.routeName.value"
-                                                :label="$tc('sw-cms.elements.customPage.labelRouteName')" 
+                                                :label="$tc('sw-cms.elements.routePagelet.labelRouteName')" 
                                                 required />
                             {% endblock %}
 
                             {% block sw_cms_el_text_config_settings_param1 %}
                                 <sw-text-field  name="routeParams" 
                                                 v-model:value="element.config.routeParam.value"
-                                                :label="$tc('sw-cms.elements.customPage.labelRouteParameters')"/>  
+                                                :label="$tc('sw-cms.elements.routePagelet.labelRouteParameters')"/>  
                             {% endblock %}
-
 
                         </sw-container>
                     {% endblock %}
