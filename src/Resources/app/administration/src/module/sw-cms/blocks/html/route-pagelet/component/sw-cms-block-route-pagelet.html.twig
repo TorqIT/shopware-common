@@ -1,0 +1,10 @@
+{% block sw_cms_block_route_pagelet %}
+	<div class="sw-cms-block-route-pagelet">
+		
+		<slot name="pagelet">
+			{% block sw_cms_block_route_pagelet_slot_pagelet %}
+			{% endblock %}
+		</slot>
+
+	</div>
+{% endblock %}

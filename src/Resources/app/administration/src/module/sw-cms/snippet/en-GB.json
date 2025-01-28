@@ -2,16 +2,17 @@
   "sw-cms": {
     "blocks": {
       "html": {
-        "customPage": {
-          "label": "Custom Page"
+        "routePagelet": {
+          "label": "Route Pagelet"
         }
       }
     },
     "elements": {
-      "customPage": {
-        "label": "Custom Page",
+      "routePagelet": {
+        "label": "Route Pagelet",
         "labelRouteName": "Route Name",
-        "labelRouteParameters": "Route Parameters"
+        "labelRouteParameters": "Route Parameters",
+        "labelPageletContentHere": "Route pagelet content will go here"
       }
     }
   }
