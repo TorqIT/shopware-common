@@ -51,4 +51,10 @@ class TorqShopwareCommon extends Plugin
     public function postUpdate(UpdateContext $updateContext): void
     {
     }
+
+    public function getMigrationNamespace(): string
+    {
+        return 'Torq\\Shopware\\Common\\Migration';
+    }
+
 }
