@@ -2,7 +2,7 @@
     "name": "torq/shopwarecommon",
     "description": "torq/shopwarecommon",
     "type": "shopware-platform-plugin",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "license": "MIT",
     "require": {
         "shopware/core": "~6.6.0",
