@@ -6,6 +6,7 @@
     {#  TODO - Validate and pass in params to the renderer
         Problem - The params passed into render here never makle it to the subrequest - Breakpoint the ShopwareInlinefragmentRenderer class to see.
     #}
-    {{ render( rPath ) }}
+    
+    {{ render( rPath, {rParams: rParams} ) }}
     
 {% endblock %}
