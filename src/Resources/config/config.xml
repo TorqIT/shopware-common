@@ -4,8 +4,12 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
 
     <card>
-        <title>Minimal configuration</title>
-
+        <title>Category Filter</title>
+        <input-field type="bool">
+            <name>categoryFilter</name>
+            <label>Enable Category Filter</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
     </card>
 
 </config>
