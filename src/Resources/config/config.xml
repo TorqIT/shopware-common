@@ -10,6 +10,14 @@
             <label>Enable Category Filter</label>
             <defaultValue>false</defaultValue>
         </input-field>
+
+        <title>In Stock Filter</title>
+        <input-field type="bool">
+            <name>instockFilter</name>
+            <label>Enable In Stock Filter</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+        
     </card>
 
 </config>

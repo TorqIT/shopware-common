@@ -1,6 +1,8 @@
 {
     "listing": {
         "filterCategoryDisplayName": "Category",
-        "filterByCategoryAriaLabel": "Filter by category"
+        "filterByCategoryAriaLabel": "Filter by category",
+        "filterInstockDisplayName": "In Stock",
+        "filterByInstockAriaLabel": "Filter by in stock"
     }
 }
