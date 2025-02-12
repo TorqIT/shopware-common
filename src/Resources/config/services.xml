@@ -53,7 +53,8 @@
             <tag name="kernel.fragment_renderer" alias="inline"/>
         </service>
 
-        <service id="Torq\Shopware\Common\Subscriber\CategoryFilterSubscriber">
+        <service id="Torq\Shopware\Common\Subscriber\ProductListingFilterSubscriber">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 

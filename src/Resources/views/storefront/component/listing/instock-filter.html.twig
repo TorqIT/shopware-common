@@ -1,0 +1,10 @@
+
+{% set filterEnabled = config('TorqShopwareCommon.config.instockFilter', context.salesChannel.id) %}
+{% if filterEnabled %}
+    {% sw_include '@Storefront/storefront/component/listing/filter/filter-boolean.html.twig' with {
+        sidebar: sidebar,
+        name: 'instock',
+        displayName: "listing.filterInstockDisplayName"|trans|striptags,
+        ariaLabel: 'listing.filterByInstockAriaLabel'|trans|sw_sanitize
+    } %}
+{% endif %}
