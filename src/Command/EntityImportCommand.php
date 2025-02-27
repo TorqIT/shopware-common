@@ -22,8 +22,8 @@ class EntityImportCommand extends Command
     {
         $this->setName('torq:entity-importer')
             ->setDescription('Import entities based on the configuration in _config.json')
-            ->addOption('configFile', null, InputOption::VALUE_REQUIRED, 'Config file for the import','custom/data/_config.json')
-            ->addOption('dataFolder', null, InputOption::VALUE_REQUIRED, 'Folder to import the data from','custom/data/');
+            ->addOption('configFile', null, InputOption::VALUE_REQUIRED, 'Config file for the import','/var/www/html/custom/data/_config.json')
+            ->addOption('dataFolder', null, InputOption::VALUE_REQUIRED, 'Folder to import the data from','/var/www/html/custom/data/');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
