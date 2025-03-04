@@ -10,10 +10,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Torq\Shopware\Common\Entity\EntityImporterExporterIdHasher;
 
 class EntityImportCommand extends Command
 {
-    public function __construct(private readonly DefinitionInstanceRegistry $definitionRegistry)
+    public function __construct(
+        private readonly DefinitionInstanceRegistry $definitionRegistry,
+        private readonly EntityImporterExporterIdHasher $idHasher
+    )
     {
         parent::__construct(); 
     }
@@ -42,12 +46,13 @@ class EntityImportCommand extends Command
         //Loop each entity configuration
         foreach($config as $entityConfig){
             $entity = $entityConfig["entity"];
-            $repo = $this->definitionRegistry->getRepository($entity);
-            
+            $repo = $this->definitionRegistry->getRepository($entity);        
+
             $file = $input->getOption('dataFolder') . $entity . '.json';        
             try{
                 $data = json_decode(file_get_contents($file),true);
                 try{
+                    $data = $this->idHasher->hashIds($entity, $data);
                     $repo->upsert($data,Context::createDefaultContext());
                     $io->write("Success importing entity - " . $entity, true);
                 }catch(Throwable $e){
