@@ -20,10 +20,14 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
+use Torq\Shopware\Common\Entity\EntityImporterExporterIdHasher;
 
 class EntityExportCommand extends Command
 {
-    public function __construct(private readonly DefinitionInstanceRegistry $definitionRegistry)
+    public function __construct(
+        private readonly DefinitionInstanceRegistry $definitionRegistry,
+        private readonly EntityImporterExporterIdHasher $idHasher
+    )
     {
         parent::__construct(); 
     }
@@ -61,7 +65,11 @@ class EntityExportCommand extends Command
             $excludeFields = array_key_exists("excludeFields",$entityConfig) ? $entityConfig["excludeFields"] : [];
             $repo = $this->definitionRegistry->getRepository($entity);
 
-            //if ids are set, add to the criteria and then add any associations and extra search criteria
+            //if ids are set, add to the criteria and then add any associations and extra search criteria 
+            if(!empty($ids)){
+                $ids = $this->idHasher->hashIdsForExport($ids);
+            }
+            
             $criteria = empty($ids) ? new Criteria() : new Criteria($ids);
             $criteria = $this->addAssociations($criteria, $associations);    
             $criteria = $this->addCriteria($criteria, $extraCriteria);

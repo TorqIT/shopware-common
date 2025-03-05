@@ -14,7 +14,7 @@ class EntityImporterExporterIdHasher
 
     }
 
-    public function hashIds(string $entityName, array $data): array
+    public function hashIdsForImport(string $entityName, array $data): array
     {
         $definition = $this->definitionRegistry->getByEntityName($entityName);
 
@@ -44,6 +44,17 @@ class EntityImporterExporterIdHasher
         }
         
         return $data;
+    }
+
+    public function hashIdsForExport(array $ids): array
+    {
+        return array_map(function($id){
+            if(!Uuid::isValid($id)){
+                return md5($id);
+            }
+
+            return $id;
+        },$ids);
     }
 }
  

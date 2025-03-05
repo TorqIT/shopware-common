@@ -28,6 +28,7 @@
 
         <service id="Torq\Shopware\Common\Command\EntityExportCommand">
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>         
+            <argument type="service" id="Torq\Shopware\Common\Entity\EntityImporterExporterIdHasher"/>         
             <tag name="console.command" />
         </service> 
 

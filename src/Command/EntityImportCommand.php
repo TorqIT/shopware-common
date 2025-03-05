@@ -52,7 +52,7 @@ class EntityImportCommand extends Command
             try{
                 $data = json_decode(file_get_contents($file),true);
                 try{
-                    $data = $this->idHasher->hashIds($entity, $data);
+                    $data = $this->idHasher->hashIdsForImport($entity, $data);
                     $repo->upsert($data,Context::createDefaultContext());
                     $io->write("Success importing entity - " . $entity, true);
                 }catch(Throwable $e){
