@@ -66,6 +66,32 @@
             <tag name="shopware.rule.definition"/>
         </service>
 
+        <service
+            id="Torq\Shopware\Common\Domain\Login\B2BDecoratedLoginRoute"
+            decorates="Shopware\Commercial\B2B\EmployeeManagement\Domain\Login\DecoratedLoginRoute"
+            public="true"
+            decoration-priority="100001"
+        >
+            <argument type="service" id=".inner"/>
+            <argument type="service" id="b2b_employee.repository"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\CartRestorer"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"/>
+        </service>
+
+        <service 
+            id="Torq\Shopware\Common\SalesChannel\Context\SalesChannelContextPersisterDecorator"
+            decorates="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"
+
+        >
+            <argument type="service" id=".inner"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\CartPersister"/>
+            <argument type="string">%shopware.api.store.context_lifetime%</argument>
+        </service>
+
         
 
     </services>
