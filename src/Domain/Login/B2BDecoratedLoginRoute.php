@@ -53,6 +53,9 @@ class B2BDecoratedLoginRoute extends AbstractLoginRoute
         if($employee != null){
             SalesChannelContextPersisterDecorator::setEmployee($employee);
         }
+        else{
+            return $this->decorated->login($data, $context);
+        }
 
         $token = $this->decorated->login($data, $context);
 
