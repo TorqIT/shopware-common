@@ -34,6 +34,8 @@ class EntityImporterExporterIdHasher
                         )
                     ) 
                     &&
+                    array_key_exists($field->getPropertyName(),$data[$key])
+                    &&
                     $data[$key][$field->getPropertyName()] !== null
                     &&
                     !Uuid::isValid($data[$key][$field->getPropertyName()] ?? '')
