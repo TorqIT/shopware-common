@@ -36,8 +36,8 @@ class EntityExportCommand extends Command
     {
         $this->setName('torq:entity-exporter')
             ->setDescription('Export entities based on the configuration in _config.json')            
-            ->addOption('configFile', null, InputOption::VALUE_REQUIRED, 'Config file for the export','/var/www/html/custom/data/_config.json')
-            ->addOption('dataFolder', null, InputOption::VALUE_REQUIRED, 'Folder to export the data to','/var/www/html/custom/data/');
+            ->addOption('configFile', null, InputOption::VALUE_REQUIRED, 'Config file for the export','custom/data/_config.json')
+            ->addOption('dataFolder', null, InputOption::VALUE_REQUIRED, 'Folder to export the data to','custom/data/');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
