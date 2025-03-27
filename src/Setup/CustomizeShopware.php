@@ -444,7 +444,7 @@ class CustomizeShopware
 
     public function deleteLanaguage($name){
         $stmt = $this->connection->prepare(
-            'delete from shopware.language where name = ?'
+            'delete from language where name = ?'
         );
         $stmt->executeStatement([$name]);
     }
