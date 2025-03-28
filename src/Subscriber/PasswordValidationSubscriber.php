@@ -17,14 +17,22 @@ class PasswordValidationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            "framework.validation.customer.password.update" => 'validatePassword'
+            "framework.validation.customer.password.update" => 'validatePassword',
+            "framework.validation.customer.create" => 'validatePassword',
+            "framework.validation.employee.password.update" => 'validatePassword',
         ];
     }
 
     public function validatePassword(BuildValidationEvent $event): void
     {
         $definition = $event->getDefinition();
+        
+        $fieldName = 'newPassword';
+        if($event->getName() === "framework.validation.customer.create" ){
+            $fieldName = 'password';
+        }
+        
         $passwordStrength = new PasswordStrength([], $this->systemConfigService->getInt('TorqShopwareCommon.config.passwordStrength'));
-        $definition->add('newPassword', $passwordStrength);
+        $definition->add($fieldName, $passwordStrength);
     }
 }
