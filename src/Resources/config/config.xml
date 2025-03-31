@@ -17,7 +17,31 @@
             <label>Enable In Stock Filter</label>
             <defaultValue>false</defaultValue>
         </input-field>
-        
-    </card>
 
+        <title>Password Strength</title>
+        <input-field type="single-select">
+            <name>passwordStrength</name>
+            <label>Minimum Password Strength</label>
+            <defaultValue>2</defaultValue>
+            <helpText>We recommend at least medium. More information available at https://symfony.com/doc/current/reference/constraints/PasswordStrength.html</helpText>
+            <options>
+                <option>
+                    <name>Weak</name>
+                    <id>1</id>
+                </option>
+                <option>
+                    <name>Medium</name>
+                    <id>2</id>
+                </option>
+                <option>
+                    <name>Strong</name>
+                    <id>3</id>
+                </option>
+                <option>
+                    <name>Very Strong</name>
+                    <id>4</id>
+                </option>
+            </options>
+        </input-field>
+    </card>
 </config>

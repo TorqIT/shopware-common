@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/page/account/b2b/confirm-invite.html.twig' %}
+
+{# 
+    Fixing a bug in the B2B page... 
+    It was looking up violations via newPassword instead of /newPassword so the password strength error message was not showing up.
+#}
+{% block b2b_components_employee_invite_new_violations %}
+    {% if formViolations.getViolations("/newPassword") is not empty %}
+        {% sw_include '@Storefront/storefront/utilities/form-violation.html.twig' with {
+            violationPath: '/newPassword'
+        } %}
+    {% endif %}
+{% endblock %}

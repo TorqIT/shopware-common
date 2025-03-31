@@ -61,6 +61,11 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="Torq\Shopware\Common\Subscriber\PasswordValidationSubscriber">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <service id="Torq\Shopware\Common\Rule\CustomerAddressCustomFieldRule">
             <tag name="shopware.rule.definition"/>
         </service>
