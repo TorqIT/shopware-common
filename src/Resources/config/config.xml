@@ -43,5 +43,22 @@
                 </option>
             </options>
         </input-field>
+
+        <title>Restrict Admin By IP</title>
+        <input-field type="bool">
+            <name>restrictAdminByIP</name>
+            <label>Restrict Admin by IP</label>
+            <helpText>Enabling this will block admin access other than for the IPs you list below. Be certain to add your own IP!</helpText>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <title>Restricted Admin IP List</title>
+        <input-field type="textarea">
+            <name>restrictAdminIPList</name>
+            <label>Permitted IP Addresses</label>
+            <helpText>Add one line per list</helpText>
+            <defaultValue></defaultValue>
+        </input-field>
+
     </card>
 </config>
