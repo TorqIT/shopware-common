@@ -96,7 +96,39 @@
             <argument type="string">%shopware.api.store.context_lifetime%</argument>
         </service>
 
-        
+        <service id="Torq\Shopware\Common\Checkout\Customer\SalesChannel\ChangePasswordRouteDecorator"
+            decorates="Shopware\Core\Checkout\Customer\SalesChannel\ChangePasswordRoute" public="true">
+            <argument type="service" id="customer.repository"/>
+            <argument type="service" id="b2b_employee.repository"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Framework\Validation\DataValidator"/>
+        </service>
+
+        <service id="Torq\Shopware\Common\Checkout\Customer\Validation\Constraint\EmployeePasswordMatchesValidator">
+            <argument type="service" id="b2b_employee.repository"/>
+
+            <tag name="validator.constraint_validator"/>
+        </service>
+
+        <service id="Torq\Shopware\Common\Controller\AuthControllerDecorated"
+                decorates="Shopware\Storefront\Controller\AuthController">
+            <argument type="service" id=".inner"/>
+            <argument type="service" id="Shopware\Storefront\Page\Account\Login\AccountLoginPageLoader"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\SendPasswordRecoveryMailRoute"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\ResetPasswordRoute"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\LoginRoute"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\LogoutRoute"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\ImitateCustomerRoute"/>
+            <argument type="service" id="Shopware\Storefront\Checkout\Cart\SalesChannel\StorefrontCartFacade"/>
+            <argument type="service" id="Shopware\Storefront\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+        </service>
 
     </services>
 </container>
