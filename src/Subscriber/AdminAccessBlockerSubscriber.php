@@ -33,9 +33,6 @@ class AdminAccessBlockerSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event): void
     {
-
-
-
         $restrictAdmin = $this->systemConfigService->getBool('TorqShopwareCommon.config.restrictAdminByIP');
 
         if ($restrictAdmin && str_starts_with($event->getRequest()->getPathInfo(), '/' . $this->adminPath)) {
@@ -71,12 +68,11 @@ class AdminAccessBlockerSubscriber implements EventSubscriberInterface
 
         if ($restrictAdmin && str_starts_with($event->getRequest()->getPathInfo(), '/' . $this->adminPath)) {
             
-            
+            $event->stopPropagation();
 
             $event->setResponse(
                 new Response($this->twig->render('@TorqShopwareCommon/administration/error-404.html.twig'))
             );
-
         }
     }
 
