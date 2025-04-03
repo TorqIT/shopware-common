@@ -56,7 +56,7 @@
         <input-field type="textarea">
             <name>restrictAdminIPList</name>
             <label>Permitted IP Addresses</label>
-            <helpText>Add one line per list</helpText>
+            <helpText>Add one IP address per line</helpText>
             <defaultValue></defaultValue>
         </input-field>
 
