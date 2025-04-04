@@ -34,7 +34,6 @@ class B2BDecoratedLoginRoute extends AbstractLoginRoute
         private readonly EntityRepository $employeeRepository,
         private readonly CartRestorer $restorer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly RequestStack $requestStack,
         private readonly SalesChannelContextPersister $contextPersister
     ) {
     }
@@ -59,10 +58,7 @@ class B2BDecoratedLoginRoute extends AbstractLoginRoute
 
         $token = $this->decorated->login($data, $context);
 
-        $mainRequest = $this->requestStack->getMainRequest();
-        $employeeId = $mainRequest->getSession()->get('employeeId');
-
-        $this->contextPersister->save($token->getToken(), ['employeeId' => $employeeId], $context->getSalesChannel()->getId());
+        $this->contextPersister->save($token->getToken(), ['employeeId' => $employee->getId()], $context->getSalesChannel()->getId());
         return $token;
     }
 
