@@ -18,7 +18,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class AdminAccessBlockerSubscriber implements EventSubscriberInterface
 {
-
     public function __construct(private string $adminPath, private SystemConfigService $systemConfigService, private \Twig\Environment $twig)
     {
     }
@@ -56,6 +55,8 @@ class AdminAccessBlockerSubscriber implements EventSubscriberInterface
             if(in_array($clientIp, $validIps)){
                 return;
             }
+
+            $event->stopPropagation();
 
             throw new NotFoundHttpException('Page not found');
         }

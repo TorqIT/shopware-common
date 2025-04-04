@@ -94,7 +94,6 @@
         <service 
             id="Torq\Shopware\Common\SalesChannel\Context\SalesChannelContextPersisterDecorator"
             decorates="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"
-
         >
             <argument type="service" id=".inner"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>

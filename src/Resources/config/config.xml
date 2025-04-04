@@ -4,20 +4,22 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
 
     <card>
-        <title>Category Filter</title>
+        <title>Filters</title>
+
         <input-field type="bool">
             <name>categoryFilter</name>
             <label>Enable Category Filter</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
-        <title>In Stock Filter</title>
         <input-field type="bool">
             <name>instockFilter</name>
             <label>Enable In Stock Filter</label>
             <defaultValue>false</defaultValue>
         </input-field>
+    </card>
 
+    <card>
         <title>Password Strength</title>
         <input-field type="single-select">
             <name>passwordStrength</name>
@@ -43,8 +45,11 @@
                 </option>
             </options>
         </input-field>
+    </card>
 
+    <card>
         <title>Restrict Admin By IP</title>
+
         <input-field type="bool">
             <name>restrictAdminByIP</name>
             <label>Restrict Admin by IP</label>
@@ -52,13 +57,11 @@
             <defaultValue>false</defaultValue>
         </input-field>
 
-        <title>Restricted Admin IP List</title>
         <input-field type="textarea">
             <name>restrictAdminIPList</name>
             <label>Permitted IP Addresses</label>
             <helpText>Add one IP address per line</helpText>
             <defaultValue></defaultValue>
         </input-field>
-
     </card>
 </config>

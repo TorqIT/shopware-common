@@ -1,19 +1,22 @@
 {% extends '@Administration/administration/error-404.html.twig' %}
 
-
 {% block administration_title %}
-    <title>Page not found</title>
+    <title>{{ 'general.404ErrorPageHeader'|trans|sw_sanitize }}</title>
 {% endblock %}
 
 {% block administration_content %}
   <div class="sw-error-404">
       <div class="sw-error-404__content">
         <div class="sw-error-404__hero">
-          <h1 class="sw-error-404__title">404</h1>
+          
+        <img
+            src="{{ asset('static/images/error/404_error.svg', '@TorqShopwareCommon') }}"
+            alt=""
+            role="presentation">
         </div>
-
-        <p style="margin-top:50px;" class="sw-error-404__description">We can’t seem to find the page you’re looking for. It might have been removed or is temporarily unavailable.</p>
+        
+        <h1 style="margin-top:20px">{{ 'general.404ErrorPageHeader'|trans|sw_sanitize }}</h1>
+        <p>{{ 'general.404ErrorDescription'|trans|sw_sanitize }}</p>
       </div>
   </div>
 {% endblock %}
-
