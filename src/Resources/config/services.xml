@@ -66,6 +66,13 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="Torq\Shopware\Common\Subscriber\AdminAccessBlockerSubscriber">
+            <argument>%shopware_administration.path_name%</argument>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Twig\Environment"/>
+            <tag name="kernel.event_subscriber" priority="255"/>
+        </service>
+
         <service id="Torq\Shopware\Common\Rule\CustomerAddressCustomFieldRule">
             <tag name="shopware.rule.definition"/>
         </service>
@@ -80,14 +87,12 @@
             <argument type="service" id="b2b_employee.repository"/>
             <argument type="service" id="Shopware\Core\System\SalesChannel\Context\CartRestorer"/>
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="request_stack"/>
             <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"/>
         </service>
 
         <service 
             id="Torq\Shopware\Common\SalesChannel\Context\SalesChannelContextPersisterDecorator"
             decorates="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"
-
         >
             <argument type="service" id=".inner"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
