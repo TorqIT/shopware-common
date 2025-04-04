@@ -2,19 +2,13 @@
 
 namespace Torq\Shopware\Common\Subscriber;
 
-use Shopware\Core\Content\LandingPage\LandingPageException;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Shopware\Core\Framework\Validation\BuildValidationEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Validator\Constraints\PasswordStrength;
-use Symfony\Contracts\EventDispatcher\Event;
 
 class AdminAccessBlockerSubscriber implements EventSubscriberInterface
 {
