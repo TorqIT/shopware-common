@@ -1,0 +1,22 @@
+{% extends '@Administration/administration/error-404.html.twig' %}
+
+{% block administration_title %}
+    <title>{{ 'general.404ErrorPageHeader'|trans|sw_sanitize }}</title>
+{% endblock %}
+
+{% block administration_content %}
+  <div class="sw-error-404">
+      <div class="sw-error-404__content">
+        <div class="sw-error-404__hero">
+          
+        <img
+            src="{{ asset('static/images/error/404_error.svg', '@TorqShopwareCommon') }}"
+            alt=""
+            role="presentation">
+        </div>
+        
+        <h1 style="margin-top:20px">{{ 'general.404ErrorPageHeader'|trans|sw_sanitize }}</h1>
+        <p>{{ 'general.404ErrorDescription'|trans|sw_sanitize }}</p>
+      </div>
+  </div>
+{% endblock %}
