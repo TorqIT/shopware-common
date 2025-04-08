@@ -135,7 +135,7 @@
             </call>
         </service>
 
-        <service id="Torq\Shopware\CustomPricing\Storefront\Controller\AsyncPricingController" public="true">
+        <service id="Torq\Shopware\Common\Storefront\Controller\QuickAddController" public="true">
             <argument type="service" id="sales_channel.product.repository" />
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
