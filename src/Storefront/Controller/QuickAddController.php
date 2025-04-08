@@ -10,6 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: ['_routeScope' => ['storefront']])]
 class QuickAddController extends StorefrontController
 {
-    public function __construct(private SalesChannelRepository $salesChannelProductRepository)
+    public function __construct(
+        private SalesChannelRepository $salesChannelProductRepository,
+        private SystemConfigService $systemConfigService)
     {
     }
 
@@ -30,6 +33,7 @@ class QuickAddController extends StorefrontController
     )]  
     public function getResults(Request $request, SalesChannelContext $context): Response
     {
+        $stackableEnabled = $this->systemConfigService->getBool('TorqShopwareCommon.config.quickAddStackableEnabled', $context->getSalesChannelId());
         $term = $request->get('term');
         $criteria = new Criteria();
         $criteria->setLimit(20);
@@ -48,7 +52,8 @@ class QuickAddController extends StorefrontController
             'id' => $x->getId(),
             'name' => $x->getTranslated()['name'],
             'productNumber' => $x->getProductNumber(),
-            'lineItemId' => Uuid::randomHex(),
+            'lineItemId' => $stackableEnabled ? $x->getId() : Uuid::randomHex(),
+            'stackable'=> intval($stackableEnabled)
         ], $products->getEntities()->getElements());
 
         return $this->renderStorefront('@Storefront/storefront/component/checkout/quick-add-autocomplete.html.twig', ['results' => $results]);

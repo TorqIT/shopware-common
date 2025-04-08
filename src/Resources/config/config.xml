@@ -64,4 +64,23 @@
             <defaultValue></defaultValue>
         </input-field>
     </card>
+
+    <card>
+        <title>Quick Add Autocomplete</title>
+
+        <input-field type="bool">
+            <name>quickAddAutocompleteEnabled</name>
+            <label>Enable Quick Add Autocomplete</label>
+            <helpText>The quick add on the cart page will autocomplete with part numbers matching the user's search.</helpText>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>quickAddStackableEnabled</name>
+            <label>Quick Add Autocomplete Stackable</label>
+            <helpText>When products are added to the cart via the autocomplete, their quantities will stack with other identical product numbers already in the cart.</helpText>
+            <defaultValue>true</defaultValue>
+        </input-field>
+        
+    </card>
 </config>

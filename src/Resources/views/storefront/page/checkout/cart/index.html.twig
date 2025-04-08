@@ -1,9 +1,13 @@
 {% sw_extends '@Storefront/storefront/page/checkout/cart/index.html.twig' %}
 
 {% block page_checkout_cart_add_product %}
-    <div data-quick-add-autocomplete-plugin class="position-relative">
-        {{ parent() }}
-        <div id="quick-add-autocomplete-container" class="position-absolute w-100 z-3 overflow-auto" style="max-height:200px">
+    {% if config('TorqShopwareCommon.config.quickAddAutocompleteEnabled') === true %}
+        <div data-quick-add-autocomplete-plugin class="position-relative">
+            {{ parent() }}
+            <div id="quick-add-autocomplete-container" class="position-absolute w-100 z-3 overflow-auto" style="max-height:200px">
+            </div>
         </div>
-    </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
 {% endblock %}
