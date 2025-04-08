@@ -1,0 +1,41 @@
+{% sw_extends '@Storefront/storefront/page/account/shopping-list-detail/shopping-list-item.html.twig' %}
+
+{% block b2b_shopping_list_item_info_image %}
+
+<a href="{{ seoUrl('frontend.detail.page', { productId: item.productId }) }}" title="{{ name }}" class="col-auto">
+    {{ parent()}}
+</a>
+
+{% endblock %}
+
+{% block b2b_shopping_list_item_info_details %}
+<div class="line-item-details">
+    <div class="line-item-details-container">
+        <a href="{{ seoUrl('frontend.detail.page', { productId: item.productId }) }}" title="{{ name }}" class="col-auto">
+            {% sw_include '@Storefront/storefront/component/line-item/element/label.html.twig' with {
+                lineItem: { label: item.product.translated.name },
+            } %}
+        </a>
+
+        <div class="line-item-product-number">
+            <span
+                class="line-item-product-number-label">{{ 'checkout.cartItemInfoId'|trans|sw_sanitize }} {{ item.product.productNumber }}</span>
+        </div>
+
+        {% if item.product.options is not empty %}
+            {% set options = item.product.options|map(option => { group: option.group.translated.name, option: option.translated.name }) %}
+
+            {% block b2b_shopping_list_item_product_variant_characteristics %}
+                <div class="line-item-product-variant">
+                    <div class="line-item-product-variant-label">
+                        {{ "shoppingList.details.variantLabel"|trans|sw_sanitize }}:
+                        {% sw_include '@Storefront/storefront/component/line-item/element/variant-characteristics.html.twig' with {
+                            lineItem: { payload: { options: options } },
+                        } %}
+                    </div>
+                </div>
+            {% endblock %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
