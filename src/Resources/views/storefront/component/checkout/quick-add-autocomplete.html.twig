@@ -1,0 +1,18 @@
+<div class="quick-add-autocomplete-container bg-light">
+    {% for product in results %}
+        <form id="productDetailPageBuyProductForm" action="/checkout/line-item/add" method="post">
+            <input type="hidden" name="lineItems[{{product.lineItemId}}][quantity]" value="1" aria-label="Quantity">
+            <input type="hidden" name="redirectTo" value="frontend.checkout.cart.page">
+            <input type="hidden" name="redirectParameters" data-redirect-parameters="true" value="{&quot;productId&quot;:&quot;01941e01bc847235a6ebb4f5f5940939&quot;}" disabled="">
+            <input type="hidden" name="lineItems[{{product.lineItemId}}][id]" value="{{product.lineItemId}}">
+            <input type="hidden" name="lineItems[{{product.lineItemId}}][type]" value="product">
+            <input type="hidden" name="lineItems[{{product.lineItemId}}][referencedId]" value="{{product.id}}">
+            <input type="hidden" name="lineItems[{{product.lineItemId}}][stackable]" value="0">
+            <input type="hidden" name="lineItems[{{product.lineItemId}}][removable]" value="1">
+            <input type="hidden" name="product-name" value="{{product.name}}">
+            <button class="btn w-100 text-left btn-quick-add-autocomplete" type="submit" title="Add to Cart" aria-label="Add to Cart">
+                {{product.productNumber}}
+            </button>
+        </form>
+    {% endfor %}
+</div>

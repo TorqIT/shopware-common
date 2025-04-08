@@ -1,0 +1,7 @@
+.btn-quick-add-autocomplete{
+    text-align: left;
+
+    &:hover{
+        background-color: lighten($sw-color-brand-primary, 50%);        
+    }
+}
