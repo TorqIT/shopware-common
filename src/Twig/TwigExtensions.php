@@ -14,7 +14,7 @@ class TwigExtensions extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('json_decode',         [$this, 'jsonDecode'])
+            new TwigFunction('json_decode', [$this, 'jsonDecode'])
         ];
     }
 
@@ -28,4 +28,5 @@ class TwigExtensions extends AbstractExtension
         $arr = json_decode($str,true);
         return $arr;
     }
+    
 }
