@@ -145,5 +145,16 @@
                  <argument type="service" id="twig"/>
              </call>
         </service>
+
+        <service id="Torq\Shopware\Common\Twig\StringTemplateRenderer"
+            decorates="Shopware\Core\Framework\Adapter\Twig\StringTemplateRenderer">
+            <argument type="service" id="twig"/>
+            <argument>%twig.cache%</argument>
+        </service>
+
+        <service id="Torq\Shopware\Common\Twig\TwigExtensions" public="true">
+            <tag name="twig.extension"/> <!--Required-->
+        </service>
+
     </services>
 </container>
