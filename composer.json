@@ -2,10 +2,10 @@
     "name": "torq/shopwarecommon",
     "description": "torq/shopwarecommon",
     "type": "shopware-platform-plugin",
-    "version": "2.9.0",
+    "version": "3.0.0",
     "license": "MIT",
     "require": {
-        "shopware/core": "~6.6.0",
+        "shopware/core": "~6.6.10",
         "defuse/php-encryption": "^2.3",
         "symfony/http-kernel": "^7.1.1"
     },
