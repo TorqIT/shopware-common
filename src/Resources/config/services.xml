@@ -92,25 +92,6 @@
             <tag name="validator.constraint_validator"/>
         </service>
 
-        <service id="Torq\Shopware\Common\Controller\AuthControllerDecorated"
-                decorates="Shopware\Storefront\Controller\AuthController">
-            <argument type="service" id=".inner"/>
-            <argument type="service" id="Shopware\Storefront\Page\Account\Login\AccountLoginPageLoader"/>
-            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\SendPasswordRecoveryMailRoute"/>
-            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\ResetPasswordRoute"/>
-            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\LoginRoute"/>
-            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\LogoutRoute"/>
-            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\ImitateCustomerRoute"/>
-            <argument type="service" id="Shopware\Storefront\Checkout\Cart\SalesChannel\StorefrontCartFacade"/>
-            <argument type="service" id="Shopware\Storefront\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-            <call method="setTwig">
-                <argument type="service" id="twig"/>
-            </call>
-        </service>
-
         <service id="Torq\Shopware\Common\Storefront\Controller\QuickAddController" public="true">
             <argument type="service" id="sales_channel.product.repository" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
