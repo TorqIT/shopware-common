@@ -77,6 +77,21 @@
             <tag name="shopware.rule.definition"/>
         </service>
 
+        <service id="Torq\Shopware\Common\Checkout\Customer\SalesChannel\ChangePasswordRouteDecorator"
+            decorates="Shopware\Core\Checkout\Customer\SalesChannel\ChangePasswordRoute" public="true">
+            <argument type="service" id="customer.repository"/>
+            <argument type="service" id="b2b_employee.repository"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Framework\Validation\DataValidator"/>
+        </service>
+
+        <service id="Torq\Shopware\Common\Checkout\Customer\Validation\Constraint\EmployeePasswordMatchesValidator">
+            <argument type="service" id="b2b_employee.repository"/>
+
+            <tag name="validator.constraint_validator"/>
+        </service>
+
         <service id="Torq\Shopware\Common\Storefront\Controller\QuickAddController" public="true">
             <argument type="service" id="sales_channel.product.repository" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
