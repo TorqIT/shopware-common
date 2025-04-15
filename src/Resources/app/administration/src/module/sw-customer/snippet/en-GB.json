@@ -1,5 +1,6 @@
 {
     "employee": {
-        "loginAsEmployee": "Log in as employee"
+        "loginAsEmployee": "Log in as employee",
+        "notificationImitateEmployeeErrorMessage": "There was an error logging in as an employee. Please make sure that opening popup windows are allowed."
     }
 }
