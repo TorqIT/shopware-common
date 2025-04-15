@@ -1,0 +1,18 @@
+
+{% block sw_customer_employee_create_content_card_first_name %}
+
+    <template>
+        <sw-container
+            class="sw-customer-employee-detail__login-as-employee-container"
+        >
+            <sw-button 
+                @click="onImitateEmployee">
+                {{ $tc('employee.loginAsEmployee') }}
+            </sw-button>
+
+        </sw-container>
+        
+    </template>
+    
+    {% parent %}
+{% endblock %}
