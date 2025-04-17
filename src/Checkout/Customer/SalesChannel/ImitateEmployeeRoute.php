@@ -25,7 +25,6 @@ use Shopware\Core\Checkout\Customer\SalesChannel\AbstractLogoutRoute;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Commercial\B2B\EmployeeManagement\Entity\Employee\EmployeeEntity;
 use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
@@ -52,7 +51,6 @@ class ImitateEmployeeRoute extends AbstractImitateEmployeeRoute
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly DataValidator $validator,
         private readonly EntityRepository $employeeRepository,
-        private readonly SalesChannelContextPersister $salesChannelContextPersister,
         private readonly EmployeeCartRestorer $employeeCartRestorer,
         private readonly CartRestorer $restorer        
     ) {
@@ -103,13 +101,6 @@ class ImitateEmployeeRoute extends AbstractImitateEmployeeRoute
 
         $event = new CustomerLoginEvent($context, $customer, $newToken);
         $this->eventDispatcher->dispatch($event);
-
-        $contextTokenResponse = new ContextTokenResponse($newToken);
-        $this->salesChannelContextPersister->save(
-            $contextTokenResponse->getToken(),
-            ['employeeId' => $employee->getId()],
-            $context->getSalesChannelId()
-        );
 
         return new ContextTokenResponse($newToken);
     }
