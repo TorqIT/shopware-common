@@ -66,11 +66,12 @@ class ImitateEmployeeRoute extends AbstractImitateEmployeeRoute
     {
         $this->validateRequestDataFields($requestDataBag, $context->getContext());
 
-        // TODO - just log out the employee
+        // just log out the customer so that we can always log in as the employee
+        // Note after logging in as an employee if the admin tries to Login As Customer for the employee's parent customer. it will still show the employee
         $customerId = $requestDataBag->getString(self::CUSTOMER_ID);
-        if ($context->getCustomerId() === $customerId) {
-            return new ContextTokenResponse($context->getToken());
-        }
+        // if ($context->getCustomerId() === $customerId) {
+        //     return new ContextTokenResponse($context->getToken());
+        // }
 
         $token = $requestDataBag->getString(self::TOKEN);
 
