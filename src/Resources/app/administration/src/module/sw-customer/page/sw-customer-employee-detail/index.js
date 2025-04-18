@@ -58,6 +58,11 @@ Shopware.Component.override('sw-customer-employee-detail', {
     methods: {
 
         async onImitateEmployee() {
+            /*
+                hasSingleBoundSalesChannelUrl will return false for employees as the 
+                boundSalesChannel data is not currently included in the businessPartnerCustomer object.
+                Going to leave as is and let the modal always open.
+            */
             if (this.hasSingleBoundSalesChannelUrl) {
                 let sc = this.businessPartnerCustomer.boundSalesChannel.id;
                 let scUrl = `${this.businessPartnerCustomer.boundSalesChannel.domains.first().url}/account/login/imitate-employee`;
