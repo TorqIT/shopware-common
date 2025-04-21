@@ -1,0 +1,41 @@
+
+{% block sw_customer_employee_create_content_card_first_name %}
+    {% block sw_customer_employee_container_imitate_employee %}
+        <template>
+            <sw-container
+                class="sw-customer-employee-detail__login-as-employee-container"
+            >
+                {% block sw_customer_employee_container_imitate_employee_modal %}
+                    <sw-employee-imitate-modal
+                        v-if="showImitateEmployeeModal"
+                        :customer="businessPartnerCustomer"
+                        :employee="entity"
+                        @modal-close="onCloseImitateEmployeeModal"
+                    />
+                {% endblock %}
+
+                {% block sw_customer_employee_container_imitate_employee_impersonation %}
+                    <sw-button 
+                        :disabled="!canUseEmployeeImitation"
+                        variant="action"
+                        @click="onImitateEmployee"
+                    >
+                        <template v-if="hasSingleBoundSalesChannelUrl">
+                           {{ $tc('employee.loginAsEmployee') }}
+                            <sw-icon
+                                name="regular-external-link-s"
+                                size="12px"
+                            />
+                        </template>
+                        <template v-else>
+                            {{ $tc('employee.loginAsEmployee') }}
+                        </template>
+                    </sw-button>
+                {% endblock %}
+            </sw-container>            
+        </template>
+    {% endblock %}
+
+    {% parent %}
+
+{% endblock %}
