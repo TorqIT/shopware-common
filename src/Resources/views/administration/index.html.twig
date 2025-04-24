@@ -1,0 +1,13 @@
+{% sw_extends '@Administration/administration/index.html.twig' %}
+
+{% block administration_head_scripts %}
+{{parent()}}
+<script nonce="{{ cspNonce }}" type="text/javascript">
+
+    const oneDay = 24 * 60 * 60 * 1000;
+    const oneYearFromNow = Date.now() + 365 * oneDay;
+
+    localStorage.setItem('lastPluginUpdateCheck', oneYearFromNow.toString());
+
+</script>
+{% endblock %}
