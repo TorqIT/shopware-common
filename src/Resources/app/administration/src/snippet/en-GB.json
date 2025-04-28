@@ -1,0 +1,9 @@
+{
+    "sw-product-stream": {
+        "filter": {
+            "values": {
+                "parentId": "Is Variant Product"
+            }
+        }
+    }
+} 

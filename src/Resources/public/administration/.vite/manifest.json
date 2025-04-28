@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "js/torq-shopware-common.js",
+    "name": "torq-shopware-common",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "css/torq-shopware-common.css"
+    ]
+  }
+}
