@@ -1,0 +1,25 @@
+{
+  "base": "/bundles/torqshopwarecommon/administration/",
+  "entryPoints": {
+    "torq-shopware-common": {
+      "css": [
+        "/bundles/torqshopwarecommon/administration/css/torq-shopware-common.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/bundles/torqshopwarecommon/administration/js/torq-shopware-common.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.0.4",
+    7,
+    0,
+    4
+  ],
+  "viteServer": null
+}
