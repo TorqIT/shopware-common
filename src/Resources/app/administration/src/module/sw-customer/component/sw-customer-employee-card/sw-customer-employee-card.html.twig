@@ -1,0 +1,26 @@
+{% block sw_customer_employee_card_grid_modals_status %}
+    {% block sw_customer_employee_imitate_employee_modal %}
+        <sw-employee-imitate-modal
+            v-if="showImitateEmployeeModal && selectedItem.id === item.id"
+            :customer="customer"
+            :employee="item"
+            @modal-close="onCloseImitateEmployeeModal"
+        />
+    {% endblock %}
+
+    {% parent %}
+{% endblock %}
+
+{% block sw_customer_employee_card_grid_actions_edit %}
+    {% block sw_customer_employee_imitate_employee_menu %}
+        <sw-context-menu-item
+            class="sw-customer-employee__action-loginas"
+            :disabled="!canUseEmployeeImitation"
+            @click="onImitateEmployee(item)"
+        >
+            {{ $tc('employee.loginAsEmployee') }}
+        </sw-context-menu-item>
+    {% endblock %}
+
+    {% parent %}
+{% endblock %}

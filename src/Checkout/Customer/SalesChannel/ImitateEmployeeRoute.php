@@ -3,6 +3,7 @@
 namespace Torq\Shopware\Common\Checkout\Customer\SalesChannel;
 
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Util\Hasher;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Framework\Validation\DataValidator;
@@ -97,6 +98,10 @@ class ImitateEmployeeRoute extends AbstractImitateEmployeeRoute
         $context->setImitatingUserId($customer->getId());
 
         $b2bToken = $this->employeeCartRestorer->loadEmployeeToken($customer->getId(), $employee->getId(), $context);
+        //to prevent login as employee before the employee has actually logged in at least once
+        if ($b2bToken === Hasher::hash($customerId . '_' . $employeeId, 'md5') ) {
+            return new ContextTokenResponse($context->getToken());
+        }
         $context = $this->restorer->restoreByToken($b2bToken, $customer->getId(), $context);
         $newToken = $context->getToken();
 
