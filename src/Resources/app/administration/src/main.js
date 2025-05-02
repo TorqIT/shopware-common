@@ -5,6 +5,7 @@ import './decorator/rule-condition-service-decoration';
 import './decorator/product-stream-condition.decorator';
 
 import './module/sw-customer/page/sw-customer-employee-detail';
+import './module/sw-customer/component/sw-customer-employee-card';
 
 import './module/sw-employee-imitate-modal';
 
