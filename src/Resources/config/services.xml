@@ -129,6 +129,7 @@
             <argument type="service" id="Shopware\Core\Framework\Validation\DataValidator"/>
             <argument type="service" id="b2b_employee.repository"/>
             <argument type="service" id="Shopware\Commercial\B2B\EmployeeManagement\Domain\Login\EmployeeCartRestorer"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"/>
             <argument type="service" id="Shopware\Core\System\SalesChannel\Context\CartRestorer"/>
         </service>
 
