@@ -62,7 +62,7 @@ class ProductListingFilterSubscriber implements EventSubscriberInterface
             [new EntityAggregation('category', 'product.categoryIds', 'category')],
 
             // defines the DAL filter which should be added to the criteria   
-            new EqualsAnyFilter('product.categoryIds', $categoryIds),
+            new EqualsAnyFilter('product.categoryTree', $categoryIds),
 
             // defines the values which will be added as currentFilter to the result
             $categoryIds

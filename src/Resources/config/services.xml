@@ -42,6 +42,10 @@
             <tag name="console.command" />
         </service>
 
+        <service id="Torq\Shopware\Common\Command\TestPasswordCommand">
+            <tag name="console.command" />
+        </service>
+
         <service id="Torq\Shopware\Common\SystemConfig\SystemConfigExtensions">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="Torq\Shopware\Common\Security\Encryption\EncryptionHandler"/>
@@ -110,6 +114,7 @@
         </service>
 
         <service id="Torq\Shopware\Common\Twig\TwigExtensions" public="true">
+            <argument type="service" id="category.repository"/>
             <tag name="twig.extension"/> <!--Required-->
         </service>
 
