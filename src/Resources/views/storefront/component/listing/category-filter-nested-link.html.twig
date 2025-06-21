@@ -1,0 +1,26 @@
+{# Start with the parent categories #}
+{% set parents = nestedLinkCategories.getParentCategories() %}
+{% set category = nestedLinkCategories.getCategory() %}
+{% set children = nestedLinkCategories.getChildCategories() %}
+
+<ul data-category-filter-nested-link-plugin>
+    {% for parent in parents %}
+        <li>
+            <span class="torq-category-filter-nested-link" data-category-id="{{ parent.id }}"><a href="{{category_url(parent)}}">{{ parent.translated.name }}</a></span>
+            <ul>
+    {% endfor %}
+        <li>
+            <span class="" data-category-id="{{ category.id }}"><strong>{{ category.translated.name }}</strong><span>
+            {% if children and children|length > 0 %}
+                <ul>
+                    {% for child in children %}
+                        <li><span class="torq-category-filter-nested-link" data-category-id="{{ child.id }}"><a href="{{category_url(child)}}">{{ child.translated.name }}</a></span></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% for parent in parents %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>

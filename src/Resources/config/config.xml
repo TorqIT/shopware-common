@@ -12,6 +12,23 @@
             <defaultValue>false</defaultValue>
         </input-field>
 
+        <input-field type="single-select">
+            <name>categoryFilterMode</name>
+            <label>Category Filter Mode</label>
+            <defaultValue>1</defaultValue>
+            <helpText>Leaf Nodes will only show the leaf nodes of the matching product's categories. Nested Links will show the current category, and its ancestors and immediate children.</helpText>
+            <options>
+                <option>
+                    <name>Leaf Nodes</name>
+                    <id>1</id>
+                </option>
+                <option>
+                    <name>Nested Links</name>
+                    <id>2</id>
+                </option>
+            </options>
+        </input-field>
+
         <input-field type="bool">
             <name>instockFilter</name>
             <label>Enable In Stock Filter</label>

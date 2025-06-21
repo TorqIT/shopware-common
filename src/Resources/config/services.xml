@@ -137,5 +137,13 @@
             <argument type="service" id="Shopware\Core\System\SalesChannel\Context\CartRestorer"/>
         </service>
 
+        <service id="Torq\Shopware\Common\Core\Content\Product\SalesChannel\Listing\NestedLinkResolveCriteriaProductListingRoute"
+            decorates="Shopware\Core\Content\Product\SalesChannel\Listing\ResolveCriteriaProductListingRoute">
+            <argument type="service" id=".inner"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="property_group.repository"/>
+            <argument type="service" id="product_manufacturer.repository"/>
+        </service>
+
     </services>
 </container>
