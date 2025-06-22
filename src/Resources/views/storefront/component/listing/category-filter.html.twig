@@ -1,10 +1,16 @@
 
 {% set filterEnabled = config('TorqShopwareCommon.config.categoryFilter', context.salesChannel.id) %}
     {# Consider moving filterEnabled check to filter-panel.html.twig#}
-    {% if filterEnabled %}
+{% if filterEnabled %}
+    {% set categoryFilterMode = config('TorqShopwareCommon.config.categoryFilterMode', context.salesChannel.id) %}
+
+    {% if categoryFilterMode == constant('Torq\\Shopware\\Common\\Constants\\FilterConstants::CATEGORY_FILTER_MODE_LEAF_NODES') %}
         {% set categories = listing.aggregations.get('category') %}
         {% if not categories.entities is empty %}
-            {% set categoriesSorted = categories.entities|sort((a, b) => a.translated.name|lower <=> b.translated.name|lower) %}
+            
+            {% set categoryTree = getCategoryTree(page.category.id, context.context) %}
+
+            {% set categoriesSorted = categoryTree|sort((a, b) => a.translated.name|lower <=> b.translated.name|lower) %}
 
             {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
                 elements: categoriesSorted,
@@ -13,5 +19,14 @@
                 displayName: 'listing.filterCategoryDisplayName'|trans|sw_sanitize,
                 ariaLabel: 'listing.filterByCategoryAriaLabel'|trans|sw_sanitize
             } %}
+        {% endif %}
+    {% elseif categoryFilterMode == constant('Torq\\Shopware\\Common\\Constants\\FilterConstants::CATEGORY_FILTER_MODE_NESTED_LINKS') %}
+        {% if page is instanceof('Shopware\\Storefront\\Page\\Navigation\\NavigationPage') %}
+            {% sw_include '@TorqShopwareCommon/storefront/component/listing/category-filter-nested-link.html.twig' with {
+                nestedLinkCategories: getNestedLinkCategories(page.category.id, context.context)
+            } %}
+        {% elseif page is instanceof('Shopware\\Storefront\\Page\\Search\\SearchPage') %}
+            {# TODO: Implement nested link filter for search page #}
+        {% endif %}
     {% endif %}
 {% endif %}
