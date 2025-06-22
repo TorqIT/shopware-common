@@ -5,3 +5,28 @@
         background-color: lighten($sw-color-brand-primary, 50%);        
     }
 }
+
+.category-filter-nested-link-plugin {
+    font-size: 14px;
+    padding: 0;
+
+    ul {
+        font-size: 14px;
+    }
+
+    .category-filter-nested-link-plugin-parent-list {
+        li{
+            list-style: none;
+        }
+        
+        padding-left: .5rem;
+    }
+
+    .category-filter-nested-link-plugin-child-list {
+        padding-left: .5rem;
+    }
+}
+
+.category-filter-nested-link-plugin-container{
+    margin-bottom: 0;
+}
