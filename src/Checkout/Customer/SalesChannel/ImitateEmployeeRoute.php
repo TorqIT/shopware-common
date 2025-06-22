@@ -26,6 +26,7 @@ use Shopware\Core\Checkout\Customer\SalesChannel\AbstractLogoutRoute;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
+use Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Commercial\B2B\EmployeeManagement\Entity\Employee\EmployeeEntity;
 use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
@@ -53,6 +54,7 @@ class ImitateEmployeeRoute extends AbstractImitateEmployeeRoute
         private readonly DataValidator $validator,
         private readonly EntityRepository $employeeRepository,
         private readonly EmployeeCartRestorer $employeeCartRestorer,
+        private readonly SalesChannelContextPersister $salesChannelContextPersister,
         private readonly CartRestorer $restorer        
     ) {
     }
@@ -98,12 +100,14 @@ class ImitateEmployeeRoute extends AbstractImitateEmployeeRoute
         $context->setImitatingUserId($customer->getId());
 
         $b2bToken = $this->employeeCartRestorer->loadEmployeeToken($customer->getId(), $employee->getId(), $context);
-        //to prevent login as employee before the employee has actually logged in at least once
-        if ($b2bToken === Hasher::hash($customerId . '_' . $employeeId, 'md5') ) {
-            return new ContextTokenResponse($context->getToken());
-        }
         $context = $this->restorer->restoreByToken($b2bToken, $customer->getId(), $context);
         $newToken = $context->getToken();
+
+        $this->salesChannelContextPersister->save(
+            $newToken,
+            ['employeeId' => $employee->getId()],
+            $context->getSalesChannelId()
+        );
 
         $event = new CustomerLoginEvent($context, $customer, $newToken);
         $this->eventDispatcher->dispatch($event);
