@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRouteResponse;
 use Shopware\Core\Content\Property\PropertyGroupEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\EntityResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
@@ -60,10 +61,15 @@ class NestedLinkResolveCriteriaProductListingRoute extends ResolveCriteriaProduc
             }
         }
 
-        $propertyAgg = $result->getResult()->getAggregations()->get('properties');
-        \assert($propertyAgg instanceof EntityResult || $propertyAgg === null);
-        if(!$propertyAgg){
-            return;
+        $productListingResult = $result->getResult();
+        
+        $propertyAgg = $productListingResult->getAggregations()->get('properties');
+        
+        if(!$propertyAgg || !$propertyAgg instanceof EntityResult) {
+            $collection = new EntityCollection();
+            $propertyAgg = new EntityResult('properties', $collection);
+            $productListingResult->getAggregations()->remove('properties');
+            $productListingResult->getAggregations()->add($propertyAgg);
         }
 
         $missingPropertyIds = array_diff($propertyIds, $propertyAgg->getEntities()->getIds());
