@@ -6,6 +6,10 @@ import Iterator from 'src/helper/iterator.helper';
 
 export default class QuickAddAutocompletePlugin extends PluginBaseClass {
 
+    static options = {
+        urlPrefix : '/'
+    };
+
     init() {
         this.client = new HttpClient();
         this._registerEvents();
@@ -26,7 +30,7 @@ export default class QuickAddAutocompletePlugin extends PluginBaseClass {
                 return;
             }
 
-            this.client.get('/checkout/cart/quickadd/autocomplete?term=' + term, c => {
+            this.client.get(this.options.urlPrefix + 'checkout/cart/quickadd/autocomplete?term=' + term, c => {
                 if(!this.autocompleteActive){
                     return;
                 }

@@ -1,6 +1,6 @@
 <div class="quick-add-autocomplete-container bg-light">
     {% for product in results %}
-        <form id="productDetailPageBuyProductForm" action="/checkout/line-item/add" method="post">
+        <form id="productDetailPageBuyProductForm" action="{{path('frontend.checkout.line-item.add')}}" method="post">
             <input type="hidden" name="lineItems[{{product.lineItemId}}][quantity]" value="1" aria-label="Quantity">
             <input type="hidden" name="redirectTo" value="frontend.checkout.cart.page">
             <input type="hidden" name="redirectParameters" data-redirect-parameters="true" value="{&quot;productId&quot;:&quot;{{product.lineItemId}}&quot;}" disabled="">
