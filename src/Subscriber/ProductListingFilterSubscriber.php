@@ -59,7 +59,7 @@ class ProductListingFilterSubscriber implements EventSubscriberInterface
             !empty($categoryIds),
 
             // Defines aggregations behind a filter. A filter can contain multiple aggregations like properties
-            [new EntityAggregation('category', 'product.categoryIds', 'category')],
+            [new EntityAggregation('category', 'product.categoryTree', 'category')],
 
             // defines the DAL filter which should be added to the criteria   
             new EqualsAnyFilter('product.categoryTree', $categoryIds),
