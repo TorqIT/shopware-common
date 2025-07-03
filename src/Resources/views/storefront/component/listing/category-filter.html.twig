@@ -2,7 +2,6 @@
 {% set filterEnabled = config('TorqShopwareCommon.config.categoryFilter', context.salesChannel.id) %}
     {# Consider moving filterEnabled check to filter-panel.html.twig#}
 {% if filterEnabled %}
-    {{dump(listing)}}
     {% set categoryFilterMode = config('TorqShopwareCommon.config.categoryFilterMode', context.salesChannel.id) %}
 
     {% if categoryFilterMode == constant('Torq\\Shopware\\Common\\Constants\\FilterConstants::CATEGORY_FILTER_MODE_LEAF_NODES') %}
@@ -27,26 +26,15 @@
                 nestedLinkCategories: getNestedLinkCategories(page.category.id, context.context)
             } %}
         {% elseif page is instanceof('Shopware\\Storefront\\Page\\Search\\SearchPage') %}
-             {% sw_include '@TorqShopwareCommon/storefront/component/listing/category-filter-nested-link-search.html.twig' with {
-                nestedLinkCategories: getNestedLinkCategoriesForSearch(listing.aggregations.get('category').entities.getIds(), context)
-            } %}
-
-            {% set categories = listing.aggregations.get('category') %}
-            {% if not categories.entities is empty %}
-                
-                {% set categoryTree = getNestedLinkCategoriesForSearch(listing.aggregations.get('category').entities.getIds(), context) %}
-
-                {% set categoriesSorted = categories.entities|sort((a, b) => a.translated.name|lower <=> b.translated.name|lower) %}
-
-                {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
-                    elements: categoriesSorted,
-                    sidebar: sidebar,
-                    name: 'category',
-                    displayName: 'listing.filterCategoryDisplayName'|trans|sw_sanitize,
-                    ariaLabel: 'listing.filterByCategoryAriaLabel'|trans|sw_sanitize
-                } %}
-            {% endif %}
-           
+             <div data-filter-search-category-filter-plugin>
+                <div class="filter-search-category-filter-container">
+                    {% set categoryId = app.request.query.get('category') %}
+                    {% set categoryIds = listing.aggregations.get('category').entities.getIds() %}
+                   {% sw_include '@TorqShopwareCommon/storefront/component/listing/search-category-filter.html.twig' with {
+                        categoryLinks: getNestedLinkCategoriesForSearch(categoryId, categoryIds, context)
+                    } %}
+                </div>
+            </div>
         {% endif %}
     {% endif %}
 {% endif %}

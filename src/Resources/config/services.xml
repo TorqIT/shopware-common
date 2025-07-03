@@ -115,6 +115,7 @@
 
         <service id="Torq\Shopware\Common\Twig\TwigExtensions" public="true">
             <argument type="service" id="category.repository"/>
+            <argument type="service" id="Torq\Shopware\Common\Service\Filter\SearchCategoryFilterBuilder"/>
             <tag name="twig.extension"/> <!--Required-->
         </service>
 
@@ -144,6 +145,20 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="property_group.repository"/>
             <argument type="service" id="product_manufacturer.repository"/>
+        </service>
+
+        <service id="Torq\Shopware\Common\Service\Filter\SearchCategoryFilterBuilder">
+            <argument type="service" id="category.repository"/>
+        </service>
+
+        <service id="Torq\Shopware\Common\Storefront\Controller\FilterController" public="true">
+            <argument type="service" id="Torq\Shopware\Common\Service\Filter\SearchCategoryFilterBuilder"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+             <call method="setTwig">
+                 <argument type="service" id="twig"/>
+             </call>
         </service>
 
     </services>
