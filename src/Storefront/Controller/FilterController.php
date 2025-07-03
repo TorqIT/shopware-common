@@ -23,8 +23,10 @@ class FilterController extends StorefrontController
         $categoryIds = $request->request->all('categoryIds');
         $categoryLinks = $this->searchCategoryFilterBuilder->build($categoryId, $categoryIds, $context);
 
-        return $this->renderStorefront('@TorqShopwareCommon/storefront/component/listing/search-category-filter.html.twig', [
-            'categoryLinks' => $categoryLinks,
+        return $this->renderStorefront('@TorqShopwareCommon/storefront/component/listing/search-category-filter-inner.html.twig', [
+            'parents' => $categoryLinks->getParentCategories(),
+            'category' => $categoryLinks->getCategory(),
+            'children' => $categoryLinks->getChildCategories()
         ]);
     }
 }

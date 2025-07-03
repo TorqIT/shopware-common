@@ -38,12 +38,9 @@
                 filterUrl: path('frontend.filter.search-category-filter')
             }%}
              <div data-search-category-filter-plugin data-search-category-filter-plugin-options="{{ categorySearchFilterOptions|json_encode }}">
-                <div class="category-search-filter-container">
-                    
-                   {% sw_include '@TorqShopwareCommon/storefront/component/listing/search-category-filter.html.twig' with {
-                        categoryLinks: getNestedLinkCategoriesForSearch(categoryId, categoryIds, context)
-                    } %}
-                </div>
+                {% sw_include '@TorqShopwareCommon/storefront/component/listing/search-category-filter.html.twig' with {
+                    categoryLinks: getNestedLinkCategoriesForSearch(categoryId, categoryIds, context)
+                } %}
             </div>
         {% endif %}
     {% endif %}

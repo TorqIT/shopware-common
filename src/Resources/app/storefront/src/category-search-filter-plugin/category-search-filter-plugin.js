@@ -13,6 +13,7 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
     static options = deepmerge(FilterBasePlugin.options, {
         filterContainer: '.category-search-filter-container',
         categoryId: null,
+        categoryName: null,
         aggregateCategoryIds: null,
         filterUrl: ''
     });
@@ -24,6 +25,7 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
 
         this._client = new HttpClient();
         this._registerEvents();
+        this._loader = DomAccess.querySelector(this.el, '.loader');
     }
 
     /**
@@ -53,57 +55,97 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
      * @public
      */
     getLabels() {
-        const activeCheckboxes =
-            DomAccess.querySelectorAll(this.el, `${this.options.checkboxSelector}:checked`, false);
 
         let labels = [];
 
-        if (activeCheckboxes) {
-            Iterator.iterate(activeCheckboxes, (checkbox) => {
-                labels.push({
-                    label: checkbox.dataset.label,
-                    id: checkbox.id,
-                });
-            });
-        } else {
-            labels = [];
+        if (this.options.categoryId) {
+           labels.push({
+                label: this.options.categoryName,
+                id: this.options.categoryId,
+           });
         }
 
         return labels;
     }
 
     setValuesFromUrl(params = {}) {
-        let stateChanged = false;
+        const properties = params[this.options.name];
 
-        // const properties = params[this.options.name];
+        const ids = properties ? properties.split('|') : [];
 
-        // const ids = properties ? properties.split('|') : [];
+        if (ids.length > 0) {
+            this.options.categoryId = ids[0];
+        }
 
-        // const uncheckItems = this.selection.filter(x => !ids.includes(x));
-        // const checkItems = ids.filter(x => !this.selection.includes(x));
+        const categoryLink = DomAccess.querySelector(this.el, `[data-category-id=\"${this.options.categoryId}\"]`, false);
+       
+        if (categoryLink) {
+            this.options.categoryName = categoryLink.dataset.categoryName;
+            return true;
+        }
 
-        // if (uncheckItems.length > 0 || checkItems.length > 0) {
-        //     stateChanged = true;
-        // }
+        return false;
+    }
 
-        // checkItems.forEach(id => {
-        //     const checkboxEl = DomAccess.querySelector(this.el, `[id="${id}"]`, false);
+    
 
-        //     if (checkboxEl) {
-        //         checkboxEl.checked = true;
-        //         this.selection.push(checkboxEl.id);
-        //     }
-        // });
+    /**
+     * @param id
+     * @public
+     */
+    reset(id) {
+        this.options.categoryId = null;
+        this._reloadFilterPane();
+    }
 
-        // uncheckItems.forEach(id => {
-        //     this.reset(id);
+    /**
+     * @public
+     */
+    resetAll() {
+        this.reset();
+    }
 
-        //     this.selection = this.selection.filter(item => item !== id);
-        // });
+    /**
+     * @public
+     */
+    refreshDisabledState(filter) {
+        
+    }
 
-        // this._updateCount();
 
-        return stateChanged;
+    /**
+     * @public
+     */
+    disableOption(input){
+
+    }
+
+    /**
+     * @public
+     */
+    enableOption(input) {
+
+    }
+
+    /**
+     * @public
+     */
+    enableAllOptions() {
+
+    }
+
+    /**
+     * @public
+     */
+    disableFilter() {
+        
+    }
+
+    /**
+     * @public
+     */
+    enableFilter() {
+        
     }
 
     /**
@@ -116,6 +158,7 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
         const categoryId = event.target.dataset.categoryId;
 
         this.options.categoryId = categoryId;
+        this.options.categoryName = event.target.dataset.categoryName;
 
         this._reloadFilterPane();
 
@@ -131,6 +174,7 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
             categoryIds: this.options.aggregateCategoryIds
         };
 
+        this._loader.style.display = 'block';
         this._client.post(
             this.options.filterUrl,
             JSON.stringify(data),
@@ -141,154 +185,12 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
 
                 try {
                     filterPane.innerHTML = responseText;
+                    this._loader.style.display = 'none';
                     this._registerEvents();
                 } catch (error) {
                     
                 }
             },
-        );
-
-        this._registerEvents();
-    }
-
-    /**
-     * @param id
-     * @public
-     */
-    reset(id) {
-        const checkboxEl = DomAccess.querySelector(this.el, `[id="${id}"]`, false);
-
-        if (checkboxEl) {
-            checkboxEl.checked = false;
-        }
-    }
-
-    /**
-     * @public
-     */
-    resetAll() {
-        this.selection.filter = [];
-
-        const checkedCheckboxes =
-            DomAccess.querySelectorAll(this.el, `${this.options.checkboxSelector}:checked`, false);
-
-        if (checkedCheckboxes) {
-            Iterator.iterate(checkedCheckboxes, (checkbox) => {
-                checkbox.checked = false;
-            });
-        }
-    }
-
-    /**
-     * @public
-     */
-    refreshDisabledState(filter) {
-        const disabledFilter = filter[this.options.name];
-
-        if (!disabledFilter.entities || disabledFilter.entities.length < 1) {
-            this.disableFilter();
-            return;
-        }
-
-        this.enableFilter();
-
-        this._disableInactiveFilterOptions(disabledFilter.entities.map(entity => entity.id));
-    }
-
-    /**
-     * @private
-     */
-    _disableInactiveFilterOptions(activeItemIds) {
-        const checkboxes = DomAccess.querySelectorAll(this.el, this.options.checkboxSelector);
-        Iterator.iterate(checkboxes, (checkbox) => {
-            if (checkbox.checked === true) {
-                return;
-            }
-
-            if (activeItemIds.includes(checkbox.id)) {
-                this.enableOption(checkbox);
-            } else {
-                this.disableOption(checkbox);
-            }
-        });
-    }
-
-    /**
-     * @public
-     */
-    disableOption(input){
-        const listItem = input.closest(this.options.listItemSelector);
-        listItem.classList.add('disabled');
-        listItem.setAttribute('title', this.options.snippets.disabledFilterText);
-        input.disabled = true;
-    }
-
-    /**
-     * @public
-     */
-    enableOption(input) {
-        const listItem = input.closest(this.options.listItemSelector);
-        listItem.removeAttribute('title');
-        listItem.classList.remove('disabled');
-        input.disabled = false;
-    }
-
-    /**
-     * @public
-     */
-    enableAllOptions() {
-        const checkboxes = DomAccess.querySelectorAll(this.el, this.options.checkboxSelector);
-        Iterator.iterate(checkboxes, (checkbox) => {
-            this.enableOption(checkbox);
-        });
-    }
-
-    /**
-     * @public
-     */
-    disableFilter() {
-        const mainFilterButton = DomAccess.querySelector(this.el, this.options.mainFilterButtonSelector);
-        mainFilterButton.classList.add('disabled');
-        mainFilterButton.setAttribute('disabled', 'disabled');
-        mainFilterButton.setAttribute('title', this.options.snippets.disabledFilterText);
-    }
-
-    /**
-     * @public
-     */
-    enableFilter() {
-        const mainFilterButton = DomAccess.querySelector(this.el, this.options.mainFilterButtonSelector);
-        mainFilterButton.classList.remove('disabled');
-        mainFilterButton.removeAttribute('disabled');
-        mainFilterButton.removeAttribute('title');
-    }
-
-    /**
-     * @private
-     */
-    _updateCount() {
-        this.counter.textContent = this.selection.length ? `(${this.selection.length})` : '';
-
-        this._updateAriaLabel();
-    }
-
-    /**
-     * Update the aria-label for the filter toggle button to reflect the number of already selected items.
-     * @private
-     */
-    _updateAriaLabel() {
-        if (!this.options.snippets.ariaLabel) {
-            return;
-        }
-
-        if (this.selection.length === 0) {
-            this.mainFilterButton.setAttribute('aria-label', this.options.snippets.ariaLabel);
-            return;
-        }
-
-        this.mainFilterButton.setAttribute(
-            'aria-label',
-            `${this.options.snippets.ariaLabel} (${this.options.snippets.ariaLabelCount.replace('%count%', this.selection.length.toString())})`
         );
     }
 }
