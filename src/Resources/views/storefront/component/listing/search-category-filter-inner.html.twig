@@ -1,0 +1,32 @@
+
+{% if category is not null %}
+    <ul class="filter-multi-select-dropdown filter-panel-item-dropdown">
+        {% for parent in parents %}
+            <li>
+                <span class="torq-category-filter-nested-link" data-category-id="{{ parent.id }}"><a href="#" data-category-id="{{ parent.id }}" data-category-name="{{ parent.translated.name }}">{{ parent.translated.name }}</a></span>
+                <ul class="category-filter-nested-link-plugin-parent-list">
+        {% endfor %}
+            <li>
+                <span class="" data-category-id="{{ category.id }}" data-category-name="{{ category.translated.name }}"><strong>{{ category.translated.name }}</strong><span>
+                {% if children and children|length > 0 %}
+                    <ul class="category-filter-nested-link-plugin-child-list">
+                        {% for child in children %}
+                            <li><span class="torq-category-filter-nested-link" data-category-id="{{ child.id }}"><a href="#" data-category-id="{{ child.id }}" data-category-name="{{ child.translated.name }}">{{ child.translated.name }}</a></span></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% for parent in parents %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <ul class="filter-multi-select-dropdown filter-panel-item-dropdown category-filter-nested-link-plugin-parent-list">
+    {% for parent in parents %}
+        <li>
+            <span class="torq-category-filter-nested-link" data-category-id="{{ parent.id }}"><a href="#" data-category-id="{{ parent.id }}" data-category-name="{{ parent.translated.name }}">{{ parent.translated.name }}</a></span>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}

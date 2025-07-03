@@ -8,13 +8,13 @@ use Shopware\Core\Content\Category\CategoryEntity;
 class NestedLinkCategories
 {
     public function __construct(
-        private readonly CategoryEntity $category,
+        private readonly ?CategoryEntity $category,
         private readonly CategoryCollection $parentCategories,
         private readonly ?CategoryCollection $childCategories,
     ) {
 
     }
-    public function getCategory(): CategoryEntity
+    public function getCategory(): ?CategoryEntity
     {
         return $this->category;
     }
@@ -29,7 +29,7 @@ class NestedLinkCategories
         return $this->childCategories;
     }
 
-    public function setCategory(CategoryEntity $category): void
+    public function setCategory(?CategoryEntity $category): void
     {
         $this->category = $category;
     }

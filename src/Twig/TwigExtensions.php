@@ -7,14 +7,21 @@ use Shopware\Core\Content\Category\CategoryEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Torq\Shopware\Common\Model\Filter\NestedLinkCategories;
+use Torq\Shopware\Common\Service\Filter\SearchCategoryFilterBuilder;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 
 class TwigExtensions extends AbstractExtension
 {
-    public function __construct(private EntityRepository $categoryRepository)
+    public function __construct(
+        private EntityRepository $categoryRepository,
+        private SearchCategoryFilterBuilder $searchCategoryFilterBuilder)
     {
     }
 
@@ -23,7 +30,8 @@ class TwigExtensions extends AbstractExtension
         return [
             new TwigFunction('json_decode', [$this, 'jsonDecode']),
             new TwigFunction('getCategoryTree', [$this, 'getCategoryTree']),
-            new TwigFunction('getNestedLinkCategories', [$this, 'getNestedLinkCategories'])
+            new TwigFunction('getNestedLinkCategories', [$this, 'getNestedLinkCategories']),
+            new TwigFunction('getNestedLinkCategoriesForSearch', [$this, 'getNestedLinkCategoriesForSearch'])
         ];
     }
 
@@ -89,5 +97,10 @@ class TwigExtensions extends AbstractExtension
         
 
         return new NestedLinkCategories($category, $parentCollection, $children);
+    }
+
+    public function getNestedLinkCategoriesForSearch(?string $filteredCat, ?array $categoryIds, SalesChannelContext $context): NestedLinkCategories{
+
+        return $this->searchCategoryFilterBuilder->build($filteredCat, $categoryIds, $context);
     }
 }

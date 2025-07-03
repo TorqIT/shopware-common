@@ -26,7 +26,22 @@
                 nestedLinkCategories: getNestedLinkCategories(page.category.id, context.context)
             } %}
         {% elseif page is instanceof('Shopware\\Storefront\\Page\\Search\\SearchPage') %}
-            {# TODO: Implement nested link filter for search page #}
+            {% set categoryId = app.request.query.get('category') %}
+            {% if categoryId is not null and '|' in categoryId %}
+                {% set categoryId = categoryId|split('|')[0] %}
+            {% endif %}
+            {% set categoryIds = listing.aggregations.get('category').entities.getIds() %}
+            {% set categorySearchFilterOptions = {
+                categoryId: categoryId,
+                aggregateCategoryIds: categoryIds|keys,
+                name: 'category',
+                filterUrl: path('frontend.filter.search-category-filter')
+            }%}
+             <div data-search-category-filter-plugin data-search-category-filter-plugin-options="{{ categorySearchFilterOptions|json_encode }}">
+                {% sw_include '@TorqShopwareCommon/storefront/component/listing/search-category-filter.html.twig' with {
+                    categoryLinks: getNestedLinkCategoriesForSearch(categoryId, categoryIds, context)
+                } %}
+            </div>
         {% endif %}
     {% endif %}
 {% endif %}
