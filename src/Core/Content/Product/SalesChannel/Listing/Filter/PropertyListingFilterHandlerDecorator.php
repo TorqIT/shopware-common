@@ -2,6 +2,7 @@
 
 namespace Torq\Shopware\Common\Core\Content\Product\SalesChannel\Listing\Filter;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter\PropertyListingFilterHandler;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
@@ -12,6 +13,8 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\DBAL\Connection;
+use Shopware\Core\Framework\Uuid\Uuid;
 
 class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler implements EventSubscriberInterface
 {
@@ -20,8 +23,9 @@ class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler
     private const CRITERIA_TITLE = 'product-listing::property-filter';
     
     public function __construct(
+        private readonly Connection $connection,
         private readonly SystemConfigService $systemConfigService,
-        private readonly PropertyListingFilterHandler $decorated,
+        private readonly PropertyListingFilterHandler $decorated
     ) {
     }
 
@@ -67,11 +71,36 @@ class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler
             return;
         }
 
-        $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, [
-            new EqualsAnyFilter('productProperties.id', $this->productIds),
-            new EqualsAnyFilter('productOptions.id', $this->productIds),
-        ]));
+        //had to opt for raw SQL for performance reasons
+        $ids = $this->getOptionIds(array_values($this->productIds));    
+        $criteria->addFilter(new EqualsAnyFilter('id', $ids));
     }
-    
+
+    private function getOptionIds(array $productIds): array
+    {
+        $productIdsHex = array_map(fn($id) => Uuid::fromHexToBytes($id), $productIds);
+        
+        $sql = <<<SQL
+
+        SELECT 
+            HEX(product_option.property_group_option_id) AS id
+        FROM 
+            product_option
+        WHERE 
+            product_option.product_id IN (:productIds)
+
+        UNION 
+
+        SELECT 
+            HEX(product_property.property_group_option_id) AS id
+        FROM 
+            product_property
+        WHERE 
+            product_property.product_id IN (:productIds)
+        SQL;
+
+        $stmt = $this->connection->executeQuery($sql, ['productIds' => $productIdsHex], ['productIds' => ArrayParameterType::BINARY]);
+        return $stmt->fetchFirstColumn();
+    }
 
 }
