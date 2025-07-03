@@ -109,7 +109,23 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
      * @public
      */
     refreshDisabledState(filter) {
-        
+        var catFilter = filter[this.options.name];
+
+        var catIds = [];
+
+        catFilter.entities.forEach(entity => {
+            catIds.push(entity.id);
+        });
+
+        if (this.options.aggregateCategoryIds && 
+            this.options.aggregateCategoryIds.length === catIds.length &&
+            this.options.aggregateCategoryIds.every((id, index) => id === catIds[index])) {
+            return;
+        }
+
+        this.options.aggregateCategoryIds = catIds;
+
+        this._reloadFilterPane();
     }
 
 
@@ -117,14 +133,12 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
      * @public
      */
     disableOption(input){
-
     }
 
     /**
      * @public
      */
     enableOption(input) {
-
     }
 
     /**
@@ -138,14 +152,13 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
      * @public
      */
     disableFilter() {
-        
     }
 
     /**
      * @public
      */
     enableFilter() {
-        
+        console.log('refreshDisabledState');        
     }
 
     /**

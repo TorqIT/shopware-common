@@ -30,6 +30,13 @@
         </input-field>
 
         <input-field type="bool">
+            <name>restrictPropertiesOnListing</name>
+            <label>Restrict Properties on Listing</label>
+            <helpText>If enabled, only properties that are in the current listing will be shown.</helpText>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>instockFilter</name>
             <label>Enable In Stock Filter</label>
             <defaultValue>false</defaultValue>
