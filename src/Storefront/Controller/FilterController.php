@@ -16,15 +16,14 @@ class FilterController extends StorefrontController
     {
     }
 
-    #[Route(path: '/filter/search-category-filter', name: 'frontend.filter.search-category-filter', methods: ['GET'])]
+    #[Route(path: '/filter/search-category-filter', name: 'frontend.filter.search-category-filter', methods: ['POST'], defaults: ['XmlHttpRequest' => true])]
     public function searchCategoryFilter(Request $request, SalesChannelContext $context): Response
     {
-        $categoryId = $request->query->get('categoryId');
-        $categoryIds = explode('|', $request->query->get('categoryIds'));
-
+        $categoryId = $request->request->get('categoryId');
+        $categoryIds = $request->request->all('categoryIds');
         $categoryLinks = $this->searchCategoryFilterBuilder->build($categoryId, $categoryIds, $context);
 
-        return $this->renderStorefront('@TorqShopwareCommon/storefront/filter/search-category-filter.html.twig', [
+        return $this->renderStorefront('@TorqShopwareCommon/storefront/component/listing/search-category-filter.html.twig', [
             'categoryLinks' => $categoryLinks,
         ]);
     }

@@ -1,1 +1,60 @@
-{{dump(categoryLinks)}}
+{# Start with the parent categories #}
+{% set parents = categoryLinks.getParentCategories() %}
+{% set category = categoryLinks.getCategory() %}
+{% set children = categoryLinks.getChildCategories() %}
+{% set displayName = 'listing.filterCategoryDisplayName'|trans|sw_sanitize %}
+{% set ariaLabel = 'listing.filterByCategoryAriaLabel'|trans|sw_sanitize %}
+{% set filterItemId = 'filter-' ~ displayName ~ '-' ~ random() %}
+
+<div class="filter-multi-select-category filter-panel-item d-grid category-filter-nested-link-plugin-container" role="listitem">
+		
+    <button class="filter-panel-item-toggle btn" aria-expanded="true" aria-label="{{ariaLabel}}" data-bs-toggle="collapse" data-bs-target="#{{filterItemId}}">
+        {{displayName}}
+        <span class="filter-multi-select-count"></span>
+        <span class="icon icon-arrow-medium-down icon-xs icon-filter-panel-item-toggle">
+            <svg aria-label="{{ariaLabel}}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewbox="0 0 16 16">
+                <defs>
+                    <path id="icons-solid-arrow-medium-down" d="M4.7071 6.2929c-.3905-.3905-1.0237-.3905-1.4142 0-.3905.3905-.3905 1.0237 0 1.4142l4 4c.3905.3905 1.0237.3905 1.4142 0l4-4c.3905-.3905.3905-1.0237 0-1.4142-.3905-.3905-1.0237-.3905-1.4142 0L8 9.5858l-3.2929-3.293z"></path>
+                </defs>
+                <use xlink:href="#icons-solid-arrow-medium-down" fill="#758CA3" fill-rule="evenodd"></use>
+            </svg>
+        </span>
+    </button>
+        
+    <div class="filter-multi-select-dropdown collapse show category-filter-nested-link-plugin" id="{{filterItemId}}">
+
+        {% if category is not null %}
+            <ul class="filter-multi-select-dropdown filter-panel-item-dropdown">
+                {% for parent in parents %}
+                    <li>
+                        <span class="torq-category-filter-nested-link" data-category-id="{{ parent.id }}"><a href="#" data-category-id="{{ parent.id }}">{{ parent.translated.name }}</a></span>
+                        <ul class="category-filter-nested-link-plugin-parent-list">
+                {% endfor %}
+                    <li>
+                        <span class="" data-category-id="{{ category.id }}"><strong>{{ category.translated.name }}</strong><span>
+                        {% if children and children|length > 0 %}
+                            <ul class="category-filter-nested-link-plugin-child-list">
+                                {% for child in children %}
+                                    <li><span class="torq-category-filter-nested-link" data-category-id="{{ child.id }}"><a href="#" data-category-id="{{ child.id }}">{{ child.translated.name }}</a></span></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% for parent in parents %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <ul class="filter-multi-select-dropdown filter-panel-item-dropdown category-filter-nested-link-plugin-parent-list">
+            {% for parent in parents %}
+                <li>
+                    <span class="torq-category-filter-nested-link" data-category-id="{{ parent.id }}"><a href="#" data-category-id="{{ parent.id }}">{{ parent.translated.name }}</a></span>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+
+
