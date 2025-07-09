@@ -14,6 +14,9 @@ export default class QuickAddAutocompletePlugin extends PluginBaseClass {
         this.client = new HttpClient();
         this._registerEvents();
         this.autocompleteActive = false;
+
+        this._onDocumentClick = this._onDocumentClick.bind(this);
+        document.addEventListener('click', this._onDocumentClick, { passive: true });
     }
 
     _registerEvents(){
@@ -53,13 +56,17 @@ export default class QuickAddAutocompletePlugin extends PluginBaseClass {
         searchBox.addEventListener('focus', s => {
             this.autocompleteActive = true;
         });
+    }
 
-        searchBox.addEventListener('blur', s => {
-            this.autocompleteActive = false;
-            
-            setTimeout(() => {
-                searchContainer.innerHTML = '';
-            }, 200);
-        });
+    _onDocumentClick(e) {
+        if (this.el.contains(e.target)) {
+            return;
+        }
+
+        const searchContainer = DomAccess.querySelector(this.el, '#quick-add-autocomplete-container', false);
+        if (searchContainer) {
+            searchContainer.innerHTML = '';
+        }
+        this.autocompleteActive = false;
     }
 }
