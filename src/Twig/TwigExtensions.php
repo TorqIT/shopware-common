@@ -31,8 +31,14 @@ class TwigExtensions extends AbstractExtension
             new TwigFunction('json_decode', [$this, 'jsonDecode']),
             new TwigFunction('getCategoryTree', [$this, 'getCategoryTree']),
             new TwigFunction('getNestedLinkCategories', [$this, 'getNestedLinkCategories']),
-            new TwigFunction('getNestedLinkCategoriesForSearch', [$this, 'getNestedLinkCategoriesForSearch'])
+            new TwigFunction('getNestedLinkCategoriesForSearch', [$this, 'getNestedLinkCategoriesForSearch']),
+            new TwigFunction('randomUuid', [$this, 'randomUuid'])
         ];
+    }
+
+    public function randomUuid(): string
+    {
+        return Uuid::randomHex();
     }
 
     /**
