@@ -108,3 +108,32 @@ Plugin base namespace: Torq\ProductAvailability
 
 **Example:**
 Start by scaffolding the entity definition for ProductAvailabilityRule with a migration, repository, and admin listing component. Use best practices for Shopware entity extensions and administration integration.
+
+## 11. Test Criteria & Acceptance Conditions
+> Define what conditions must be met for this module to be considered correct and complete. Include edge cases, test scenarios, and any performance or UX expectations.
+
+**Functional Test Cases (Examples):**
+- ✅ Rule applies correctly to hide a product from the storefront listing
+- ✅ Product detail page shows "not available" message when blocked by a rule
+- ✅ Rule management UI allows create, edit, delete of rules
+- ✅ Conditions JSON validates before saving
+- ✅ Rule only applies when marked `active = true`
+
+**Edge Cases:**
+- ✅ Rule with invalid JSON condition is skipped and logged
+- ✅ Guest user sees a different result than a logged-in customer due to rule targeting
+- ✅ Rule applying to out-of-stock products works with real-time stock updates
+
+**Integration Checks:**
+- ✅ API `/product` responses reflect rule filtering
+- ✅ Rule entity appears in admin search
+- ✅ Event subscriber for `ProductLoadedEvent` is triggered and applies rules
+
+**Performance & Stability:**
+- ✅ No perceptible delay on category listing page with 100+ rules defined
+- ✅ No unhandled exceptions in rule evaluation service
+- ✅ Rule engine caches correctly per user session when applicable
+
+**Test Coverage Goal:**
+- Aim for unit + integration test coverage of all rule evaluation logic and admin module actions.
+
