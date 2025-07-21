@@ -14,3 +14,7 @@ import enGB from './snippet/en-GB.json';
 
 // Register snippets
 Shopware.Locale.register('en-GB', enGB);
+
+import CsvDownloadMixin from './mixin/csv-download-mixin';
+const { Mixin } = Shopware;
+Mixin.register('csv-download-mixin', CsvDownloadMixin);
