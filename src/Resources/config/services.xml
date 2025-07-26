@@ -43,6 +43,7 @@
         </service>
 
         <service id="Torq\Shopware\Common\Command\TestPasswordCommand">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="console.command" />
         </service>
 
