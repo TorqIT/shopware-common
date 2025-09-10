@@ -3,16 +3,12 @@
 namespace Torq\Shopware\Common\Subscriber;
 
 use Symfony\Component\HttpFoundation\Request;
-use Shopware\Core\Content\Product\ProductCollection;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Core\Content\Product\Events\ProductListingCollectFilterEvent;
 use Shopware\Core\Content\Product\Events\ProductListingResultEvent;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\SumAggregation;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
 
 class ProductListingFilterSubscriber implements EventSubscriberInterface
