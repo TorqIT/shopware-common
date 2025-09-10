@@ -3,13 +3,15 @@
 namespace Torq\Shopware\Common\Subscriber;
 
 use Symfony\Component\HttpFoundation\Request;
+use Shopware\Core\Content\Product\ProductCollection;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Core\Content\Product\Events\ProductListingCollectFilterEvent;
+use Shopware\Core\Content\Product\Events\ProductListingResultEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MaxAggregation;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\SumAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
 
@@ -25,7 +27,8 @@ class ProductListingFilterSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductListingCollectFilterEvent::class => 'addFilter'
+            ProductListingCollectFilterEvent::class => 'addFilter',
+            ProductListingResultEvent::class => 'filterResult'
         ];
     }
 
@@ -37,11 +40,6 @@ class ProductListingFilterSubscriber implements EventSubscriberInterface
         $categoryFilterActive = $this->systemConfigService->get('TorqShopwareCommon.config.categoryFilter', $salesChannelId);;
         if($categoryFilterActive)
             $this->addCategoryFilter($event);
-
-        //In Stock filter
-        $instockFilterActive = $this->systemConfigService->get('TorqShopwareCommon.config.instockFilter', $salesChannelId);;
-        if($instockFilterActive)
-            $this->addInstockFilter($event);
     }
 
     private function addCategoryFilter(ProductListingCollectFilterEvent $event): void {
@@ -72,35 +70,29 @@ class ProductListingFilterSubscriber implements EventSubscriberInterface
         $filters->add($filter);
     }
 
-    private function addInstockFilter(ProductListingCollectFilterEvent $event): void {
-        // fetch existing filters
-        $filters = $event->getFilters();
+    public function filterResult(ProductListingResultEvent $event): void
+    {
         $request = $event->getRequest();
 
-        //Check if filter is selected or not
         $isInStockFiltered = $request->query->get(self::INSTOCK_FILTER);
         if ($request->isMethod(Request::METHOD_POST)) {
             $isInStockFiltered = $request->request->get(self::INSTOCK_FILTER);
         }
-        $isInStockFiltered = $isInStockFiltered && $isInStockFiltered === "1" ? true:false;
+        $isInStockFiltered = $isInStockFiltered && $isInStockFiltered === "1" ? true : false;
 
-        $inStockFilter = new Filter(
-            'instock',
-            $isInStockFiltered,
-            [
-                new FilterAggregation(
-                    'instockFilter',
-                    new MaxAggregation('instock', 'product.stock'),
-                    [
-                        new RangeFilter('product.stock', [RangeFilter::GT => 0])
-                    ]
-                ),
-            ],
-            new RangeFilter('product.stock', [RangeFilter::GT => 0]),
-            $isInStockFiltered
-        );
+        if (!$isInStockFiltered) {
+            return;
+        }
 
-        $filters->add($inStockFilter);
+        $result = $event->getResult();
+        $products = $result->getElements();
+
+        $filtered = array_filter($products, function ($product) {
+            /** @var \Shopware\Core\Content\Product\ProductEntity $product */
+            return $product->getStock() > 0;
+        });
+
+        $result->assign(['elements' => $filtered, 'total' => count($filtered)]);
     }
 
     /**
