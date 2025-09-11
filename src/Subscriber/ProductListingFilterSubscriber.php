@@ -34,8 +34,9 @@ class ProductListingFilterSubscriber implements EventSubscriberInterface
 
         //Category filter
         $categoryFilterActive = $this->systemConfigService->get('TorqShopwareCommon.config.categoryFilter', $salesChannelId);;
-        if($categoryFilterActive)
+        if($categoryFilterActive){
             $this->addCategoryFilter($event);
+        }
     }
 
     private function addCategoryFilter(ProductListingCollectFilterEvent $event): void {
@@ -70,25 +71,39 @@ class ProductListingFilterSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $isInStockFiltered = $request->query->get(self::INSTOCK_FILTER);
-        if ($request->isMethod(Request::METHOD_POST)) {
-            $isInStockFiltered = $request->request->get(self::INSTOCK_FILTER);
-        }
-        $isInStockFiltered = $isInStockFiltered && $isInStockFiltered === "1" ? true : false;
-
+        $isInStockFiltered = $request->get(self::INSTOCK_FILTER) === "1";
         if (!$isInStockFiltered) {
             return;
         }
 
         $result = $event->getResult();
         $products = $result->getElements();
+        $entities = $result->getEntities();
 
-        $filtered = array_filter($products, function ($product) {
+        // Filter elements and collect IDs of in-stock products in one pass
+        $filteredElements = [];
+        $inStockIds = [];
+        
+        foreach ($products as $key => $product) {
             /** @var \Shopware\Core\Content\Product\ProductEntity $product */
-            return $product->getStock() > 0;
+            if ($product->getStock() > 0) {
+                $filteredElements[$key] = $product;
+                $inStockIds[] = $product->getId();
+            }
+        }
+
+        // Filter entities using the collected ids
+        $filteredEntities = $entities->filter(function ($entity) use ($inStockIds) {
+            /** @var \Shopware\Core\Content\Product\ProductEntity $entity */
+            return in_array($entity->getId(), $inStockIds, true);
         });
 
-        $result->assign(['elements' => $filtered, 'total' => count($filtered)]);
+        //update the products and entities along with the total
+        $result->assign([
+            'elements' => $filteredElements, 
+            'entities' => $filteredEntities,
+            'total' => count($filteredElements)
+        ]);
     }
 
     /**
