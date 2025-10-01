@@ -34,7 +34,7 @@ To add to a Shopware page you will need to override/extend the page first.
 
             <sw-sidebar-item
                 icon="regular-download"
-                :title="$tc('Download as CSV')"
+                :title="$tc('downloadAsCsv.title')"
                 @click="onDownloadCsv"
             />
 
