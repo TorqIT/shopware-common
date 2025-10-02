@@ -5,5 +5,12 @@
                 "parentId": "Is Variant Product"
             }
         }
+    },
+    "downloadAsCsv": {
+        "title": "Download as CSV",
+        "notificationTitle": "CSV Download",
+        "notificationReadyMsg": "Your CSV download is ready.",
+        "notificationNoDataMsg": "No data available to download.",
+        "notificationBeingPrepared": "Your download is being prepared. This may take some time for large datasets."
     }
 } 
