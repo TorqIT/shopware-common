@@ -45,7 +45,9 @@ export default class SearchCategoryFilterPlugin extends FilterBasePlugin {
      */
     getValues() {
         const values = {};
-        values[this.options.name] = this.options.categoryId;
+        if (this.options.categoryId){
+            values[this.options.name] = this.options.categoryId;
+        }
 
         return values;
     }
