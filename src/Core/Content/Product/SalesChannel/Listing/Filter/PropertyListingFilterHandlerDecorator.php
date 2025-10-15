@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Uuid\Uuid;
 
+//TODO: This feature may not be validate and implementation had issues. Am removing functionality for now.
 class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler implements EventSubscriberInterface
 {
     private array $productIds = [];
@@ -61,7 +62,8 @@ class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler
 
     public function processEntitySearchedEvent(EntitySearchedEvent $event): void
     {
-        if(!$this->systemConfigService->getBool('TorqShopwareCommon.config.restrictPropertiesOnListing')) {
+        //short-circuit this as seems invalid. JN
+        if(true){ // !$this->systemConfigService->getBool('TorqShopwareCommon.config.restrictPropertiesOnListing')) {
             return;
         }
 
@@ -73,7 +75,7 @@ class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler
 
         //had to opt for raw SQL for performance reasons
         $ids = $this->getOptionIds(array_values($this->productIds));    
-        $criteria->addFilter(new EqualsAnyFilter('id', $ids));
+        //$criteria->addFilter(new EqualsAnyFilter('id', $ids));
     }
 
     private function getOptionIds(array $productIds): array
@@ -86,8 +88,18 @@ class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler
             HEX(product_option.property_group_option_id) AS id
         FROM 
             product_option
+        JOIN
+            property_group_option
+        ON
+            product_option.property_group_option_id = property_group_option.id
+        JOIN
+            property_group
+        ON
+            property_group.id = property_group_option.property_group_id
         WHERE 
             product_option.product_id IN (:productIds)
+            AND
+            property_group.filterable = 1
 
         UNION 
 
@@ -95,8 +107,18 @@ class PropertyListingFilterHandlerDecorator extends PropertyListingFilterHandler
             HEX(product_property.property_group_option_id) AS id
         FROM 
             product_property
+        JOIN
+            property_group_option
+        ON
+            product_property.property_group_option_id = property_group_option.id
+        JOIN
+            property_group 
+        ON
+            property_group.id = property_group_option.property_group_id
         WHERE 
             product_property.product_id IN (:productIds)
+            AND
+            property_group.filterable = 1
         SQL;
 
         $stmt = $this->connection->executeQuery($sql, ['productIds' => $productIdsHex], ['productIds' => ArrayParameterType::BINARY]);
