@@ -67,11 +67,41 @@ export default {
                 }
                 return;
             }
+
             columns = columns.filter(col => col.property);
-            const header = columns.map(col => '"' + col.label + '"').join(',');
+            
+            // Helper function to properly escape CSV values
+            const escapeCsvValue = (value) => {
+                if (value === null || value === undefined) {
+                    return '';
+                }
+                
+                const stringValue = String(value);
+                
+                // If the value contains quotes, commas, or newlines, it needs to be escaped
+                if (stringValue.includes('"') || stringValue.includes(',') || stringValue.includes('\n') || stringValue.includes('\r')) {
+                    // Escape double quotes by doubling them and wrap the entire value in quotes
+                    return '"' + stringValue.replace(/"/g, '""') + '"';
+                }
+                
+                return stringValue;
+            };
+
+            const header = columns.map(col => escapeCsvValue(col.label)).join(',');
             const rows = data.map(row =>
-                columns.map(col => '"' + (row[col.property] !== undefined ? row[col.property] : '') + '"').join(',')
+                columns.map(col => {
+                    let value = row[col.property];
+                    
+                    // Handle nested properties (like manufacturer.name)
+                    if (col.property && col.property.includes('.')) {
+                        const keys = col.property.split('.');
+                        value = keys.reduce((obj, key) => obj?.[key], row);
+                    }
+                    
+                    return escapeCsvValue(value);
+                }).join(',')
             );
+
             const csvContent = [header, ...rows].join('\n');
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
