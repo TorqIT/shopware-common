@@ -6,6 +6,7 @@ This repository (plugin) provides a centralized location for commonly reused cod
 
 ## Package Versions
 **Shopware 6.6.x** use branch v3.x
+
 **Shopware 6.7.x** use branch v4.x
 
 ---
