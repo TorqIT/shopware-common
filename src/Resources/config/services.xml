@@ -104,9 +104,6 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <call method="setTwig">
-                 <argument type="service" id="twig"/>
-             </call>
         </service>
 
         <service id="Torq\Shopware\Common\Twig\StringTemplateRenderer"
@@ -158,9 +155,6 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-             <call method="setTwig">
-                 <argument type="service" id="twig"/>
-             </call>
         </service>
 
         <service id="Torq\Shopware\Common\Core\Content\Product\SalesChannel\Listing\Filter\PropertyListingFilterHandlerDecorator"

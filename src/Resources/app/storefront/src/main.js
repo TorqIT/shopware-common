@@ -19,3 +19,9 @@ PluginManager.register(
     SearchCategoryFilterPlugin,
     '[data-search-category-filter-plugin]'
 );
+
+PluginManager.override(
+    'FilterPropertySelect', 
+    () => import('./disable-filter-options-patch-plugin/disable-filter-options-patch.plugin'), 
+    '[data-filter-property-select]'
+);
