@@ -21,10 +21,18 @@ PluginManager.register(
     '[data-search-category-filter-plugin]'
 );
 
+// Register FilterCountUpdaterPlugin for both multi-select and property-select filters
+// Since it extends FilterMultiSelectPlugin, it works for both types
 PluginManager.register(
-    'FilterCountUpdaterPlugin',
+    'FilterMultiSelectCount',
     FilterCountUpdaterPlugin,
-    '.filter-panel'
+    '[data-filter-multi-select]'
+);
+
+PluginManager.register(
+    'FilterPropertySelectCount',
+    FilterCountUpdaterPlugin,
+    '[data-filter-property-select]'
 );
 
 PluginManager.override(
