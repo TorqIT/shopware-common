@@ -1,0 +1,20 @@
+{% sw_extends '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' %}
+
+{# Extended to pass count information from CountMapResult to list items #}
+
+{% block component_filter_multi_select_list_item_inner %}
+    {# Get count map from aggregations if available #}
+    {% set countMap = null %}
+
+    {% if listing is defined and listing.aggregations is defined %}
+        {% set countsAggregation = listing.aggregations.get(name ~ '-counts') %}
+        {% if countsAggregation is not null %}
+            {% set countMap = countsAggregation.counts %}
+        {% endif %}
+    {% endif %}
+
+    {# Pass countMap to list item template #}
+    {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select-list-item.html.twig' with {
+        countMap: countMap
+    } %}
+{% endblock %}

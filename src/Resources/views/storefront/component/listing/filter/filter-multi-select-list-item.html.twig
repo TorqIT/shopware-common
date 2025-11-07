@@ -1,0 +1,40 @@
+{% sw_extends '@Storefront/storefront/component/listing/filter/filter-multi-select-list-item.html.twig' %}
+
+{# Extended to display product counts and disable zero-count options #}
+
+{% block component_filter_multi_select_list_item %}
+    {# Get count for this element #}
+    {% set count = null %}
+    {% set isDisabled = false %}
+
+    {% if countMap is defined and countMap is not null %}
+        {% set count = countMap[element.id] ?? null %}
+        {% set isDisabled = count is not null and count == 0 %}
+    {% endif %}
+
+    <div class="form-check{% if isDisabled %} filter-option-disabled{% endif %}">
+        {% set id = element.id %}
+        {% set name = element.translated.name %}
+
+        {% block component_filter_multi_select_list_item_checkbox_input %}
+            <input type="checkbox"
+                   class="form-check-input filter-multi-select-checkbox"
+                   data-label="{{ name }}"
+                   value="{{ id }}"
+                   id="{{ id }}"
+                   {% if count is not null %}data-count="{{ count }}"{% endif %}
+                   {% if isDisabled %}disabled{% endif %}>
+        {% endblock %}
+
+        {% block component_filter_multi_select_list_item_label_element %}
+            <label class="filter-multi-select-item-label form-check-label" for="{{ id }}">
+                {% block component_multi_select_list_item_label %}
+                    {{ name }}
+                    {% if count is not null %}
+                        <span class="filter-option-count">({{ count }})</span>
+                    {% endif %}
+                {% endblock %}
+            </label>
+        {% endblock %}
+    </div>
+{% endblock %}

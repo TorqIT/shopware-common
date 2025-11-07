@@ -1,0 +1,104 @@
+<?php declare(strict_types=1);
+
+namespace Torq\Shopware\Common\Elasticsearch;
+
+use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\Log\Package;
+use Shopware\Elasticsearch\Framework\DataAbstractionLayer\AbstractElasticsearchAggregationHydrator;
+use Torq\Shopware\Common\Core\Content\Product\SalesChannel\Listing\CountMapResult;
+
+/**
+ * Hydrator decorator that extracts cardinality counts from raw Elasticsearch aggregation responses
+ * and adds them as CountMapResult aggregations.
+ */
+#[Package('torq-common')]
+class CardinalityAggregationHydrator extends AbstractElasticsearchAggregationHydrator
+{
+    private const AGGREGATION_NAMES = [
+        'properties',
+        'options',
+        'manufacturer',
+    ];
+
+    public function __construct(
+        private readonly AbstractElasticsearchAggregationHydrator $decorated
+    ) {
+    }
+
+    public function getDecorated(): AbstractElasticsearchAggregationHydrator
+    {
+        return $this->decorated;
+    }
+
+    public function hydrate(
+        EntityDefinition $definition,
+        Criteria $criteria,
+        Context $context,
+        array $result
+    ): AggregationResultCollection {
+        // Let the decorated hydrator do its normal work
+        $collection = $this->decorated->hydrate($definition, $criteria, $context, $result);
+
+        // Only parse cardinality for product aggregations
+        if ($definition->getEntityName() === 'product') {
+            // Parse cardinality values from the raw response and add CountMapResults
+            $this->parseCardinalityValues($result, $collection);
+        }
+
+        return $collection;
+    }
+
+    private function parseCardinalityValues(array $result, AggregationResultCollection $collection): void
+    {
+        if (!isset($result['aggregations'])) {
+            return;
+        }
+
+        $aggregations = $result['aggregations'];
+
+        foreach (self::AGGREGATION_NAMES as $aggregationName) {
+            $counts = [];
+
+            if (!isset($aggregations[$aggregationName])) {
+                continue;
+            }
+
+            $aggData = $aggregations[$aggregationName];
+
+            // Handle NestedAggregation - buckets are nested
+            if (isset($aggData[$aggregationName]['buckets'])) {
+                $buckets = $aggData[$aggregationName]['buckets'];
+            } elseif (isset($aggData['buckets'])) {
+                $buckets = $aggData['buckets'];
+            } else {
+                continue;
+            }
+
+            // Extract cardinality from each bucket
+            $cardinalityName = $aggregationName . '_parent_count';
+            foreach ($buckets as $bucket) {
+                $key = $bucket['key'];
+
+                // For nested aggregations, cardinality is inside 'to_parent' reverse nested agg
+                if (isset($bucket['to_parent'][$cardinalityName]['value'])) {
+                    $counts[$key] = (int) $bucket['to_parent'][$cardinalityName]['value'];
+                }
+                // For direct aggregations (manufacturer), cardinality is directly in bucket
+                elseif (isset($bucket[$cardinalityName]['value'])) {
+                    $counts[$key] = (int) $bucket[$cardinalityName]['value'];
+                }
+            }
+
+            if (!empty($counts)) {
+                $countMapName = $aggregationName . '-counts';
+                // Only add if it doesn't already exist (prevent duplicates)
+                if (!$collection->has($countMapName)) {
+                    $collection->add(new CountMapResult($countMapName, $counts));
+                }
+            }
+        }
+    }
+}
