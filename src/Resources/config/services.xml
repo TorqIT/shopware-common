@@ -171,7 +171,7 @@
         </service>
 
         <!-- Cardinality Aggregation Hydrator - Parses cardinality values from raw ES responses -->
-        <service id="Torq\Shopware\Common\Elasticsearch\CardinalityAggregationHydrator"
+        <service id="Torq\Shopware\Common\Elasticsearch\CardinalityAggregationHydratorDecorator"
             decorates="Shopware\Elasticsearch\Framework\DataAbstractionLayer\AbstractElasticsearchAggregationHydrator">
             <argument type="service" id=".inner"/>
         </service>

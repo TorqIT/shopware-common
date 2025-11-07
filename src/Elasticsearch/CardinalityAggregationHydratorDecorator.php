@@ -15,7 +15,7 @@ use Torq\Shopware\Common\Core\Content\Product\SalesChannel\Listing\CountMapResul
  * and adds them as CountMapResult aggregations.
  */
 #[Package('torq-common')]
-class CardinalityAggregationHydrator extends AbstractElasticsearchAggregationHydrator
+class CardinalityAggregationHydratorDecorator extends AbstractElasticsearchAggregationHydrator
 {
     private const AGGREGATION_NAMES = [
         'properties',
