@@ -19,6 +19,20 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 #[Package('torq-common')]
 class ElasticsearchCardinalitySubscriber implements EventSubscriberInterface
 {
+    /**
+     * Shopware core field that groups parent products with their variants.
+     * All variants share the same displayGroup as their parent, making it perfect for counting distinct parent products.
+     * Stable across all variant display modes (grouped, expanded, main variant).
+     */
+    private const DISPLAY_GROUP_FIELD = 'displayGroup';
+
+    /**
+     * Arbitrary name for the ReverseNestedAggregation that returns from nested property context to parent document context.
+     * This name is used to access the aggregation results in the response JSON.
+     * Must match the reference in CardinalityAggregationHydratorDecorator.
+     */
+    public const TO_PARENT_AGGREGATION_NAME = 'to_parent';
+
     private const AGGREGATION_NAMES = [
         'properties',
         'options',
@@ -79,9 +93,9 @@ class ElasticsearchCardinalitySubscriber implements EventSubscriberInterface
                 foreach ($innerAggregations as $innerAgg) {
                     if ($innerAgg instanceof TermsAggregation && $innerAgg->getName() === $aggregationName) {
                         // For nested aggregations, we need ReverseNested to get back to parent docs
-                        $reverseNested = new ReverseNestedAggregation('to_parent');
+                        $reverseNested = new ReverseNestedAggregation(self::TO_PARENT_AGGREGATION_NAME);
                         $cardinalityAgg = new CardinalityAggregation($aggregationName . '_parent_count');
-                        $cardinalityAgg->setField('displayGroup');
+                        $cardinalityAgg->setField(self::DISPLAY_GROUP_FIELD);
                         $reverseNested->addAggregation($cardinalityAgg);
                         $innerAgg->addAggregation($reverseNested);
                         break;
@@ -90,7 +104,7 @@ class ElasticsearchCardinalitySubscriber implements EventSubscriberInterface
             } elseif ($aggregation instanceof TermsAggregation) {
                 // Add cardinality sub-aggregation directly to the existing aggregation
                 $cardinalityAgg = new CardinalityAggregation($aggregationName . '_parent_count');
-                $cardinalityAgg->setField('displayGroup');
+                $cardinalityAgg->setField(self::DISPLAY_GROUP_FIELD);
                 $aggregation->addAggregation($cardinalityAgg);
             }
         }

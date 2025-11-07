@@ -9,6 +9,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Elasticsearch\Framework\DataAbstractionLayer\AbstractElasticsearchAggregationHydrator;
 use Torq\Shopware\Common\Core\Content\Product\SalesChannel\Listing\CountMapResult;
+use Torq\Shopware\Common\Subscriber\ElasticsearchCardinalitySubscriber;
 
 /**
  * Hydrator decorator that extracts cardinality counts from raw Elasticsearch aggregation responses
@@ -89,9 +90,9 @@ class CardinalityAggregationHydratorDecorator extends AbstractElasticsearchAggre
             foreach ($buckets as $bucket) {
                 $key = $bucket['key'];
 
-                // For nested aggregations, cardinality is inside 'to_parent' reverse nested agg
-                if (isset($bucket['to_parent'][$cardinalityName]['value'])) {
-                    $counts[$key] = (int) $bucket['to_parent'][$cardinalityName]['value'];
+                // For nested aggregations, cardinality is inside reverse nested agg (see ElasticsearchCardinalitySubscriber::TO_PARENT_AGGREGATION_NAME)
+                if (isset($bucket[ElasticsearchCardinalitySubscriber::TO_PARENT_AGGREGATION_NAME][$cardinalityName]['value'])) {
+                    $counts[$key] = (int) $bucket[ElasticsearchCardinalitySubscriber::TO_PARENT_AGGREGATION_NAME][$cardinalityName]['value'];
                 }
                 // For direct aggregations (manufacturer), cardinality is directly in bucket
                 elseif (isset($bucket[$cardinalityName]['value'])) {
