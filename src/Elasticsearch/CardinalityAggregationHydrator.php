@@ -68,10 +68,17 @@ class CardinalityAggregationHydrator extends AbstractElasticsearchAggregationHyd
 
             $aggData = $aggregations[$aggregationName];
 
-            // Handle NestedAggregation - buckets are nested
-            if (isset($aggData[$aggregationName]['buckets'])) {
+            // Handle different nesting patterns for buckets
+            // When reduce-aggregations is active, Shopware wraps aggregations in filter aggregations
+            // causing an extra level of nesting for nested aggregations
+            if (isset($aggData[$aggregationName][$aggregationName]['buckets'])) {
+                // Triple-nested: reduce-aggregations with nested aggregation
+                $buckets = $aggData[$aggregationName][$aggregationName]['buckets'];
+            } elseif (isset($aggData[$aggregationName]['buckets'])) {
+                // Double-nested: normal nested aggregation
                 $buckets = $aggData[$aggregationName]['buckets'];
             } elseif (isset($aggData['buckets'])) {
+                // Direct: direct aggregation (manufacturer)
                 $buckets = $aggData['buckets'];
             } else {
                 continue;

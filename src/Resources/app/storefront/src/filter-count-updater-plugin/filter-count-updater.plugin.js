@@ -135,11 +135,13 @@ export default class FilterCountUpdaterPlugin extends Plugin {
         const manufacturerCounts = filter['manufacturer-counts']?.counts || {};
 
         // Merge all count maps into a single object
-        return {
+        const merged = {
             ...propertiesCounts,
             ...optionsCounts,
             ...manufacturerCounts
         };
+
+        return merged;
     }
 
     /**
@@ -158,12 +160,8 @@ export default class FilterCountUpdaterPlugin extends Plugin {
     _updateCheckboxCount(checkbox, counts) {
         // Get the option ID from checkbox ID attribute
         const optionId = checkbox.id;
-        const count = counts[optionId];
-
-        // Only update if we have count data for this option
-        if (count === undefined) {
-            return;
-        }
+        // Treat undefined/missing counts as 0
+        const count = counts[optionId] ?? 0;
 
         // Update data attribute
         checkbox.dataset.count = count;
@@ -175,9 +173,10 @@ export default class FilterCountUpdaterPlugin extends Plugin {
         }
 
         const countSpan = listItem.querySelector('.filter-option-count');
+
         if (countSpan) {
-            // Update the count display
-            countSpan.textContent = `(${count})`;
+            // Update the count display - show empty string for 0, otherwise show count
+            countSpan.textContent = count === 0 ? '' : `(${count})`;
         }
 
         // Handle disabled state for zero counts

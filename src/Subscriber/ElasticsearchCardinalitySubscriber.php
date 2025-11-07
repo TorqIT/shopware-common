@@ -2,6 +2,7 @@
 
 namespace Torq\Shopware\Common\Subscriber;
 
+use OpenSearchDSL\Aggregation\Bucketing\FilterAggregation;
 use OpenSearchDSL\Aggregation\Bucketing\NestedAggregation;
 use OpenSearchDSL\Aggregation\Bucketing\ReverseNestedAggregation;
 use OpenSearchDSL\Aggregation\Bucketing\TermsAggregation;
@@ -53,6 +54,20 @@ class ElasticsearchCardinalitySubscriber implements EventSubscriberInterface
 
             if ($aggregation === null) {
                 continue;
+            }
+
+            // Handle FilterAggregation (used when reduce-aggregations is active)
+            // FilterAggregation wraps the actual aggregation, so we need to unwrap it
+            if ($aggregation instanceof FilterAggregation) {
+                $innerAggs = $aggregation->getAggregations();
+
+                foreach ($innerAggs as $innerAgg) {
+                    if ($innerAgg->getName() === $aggregationName) {
+                        // Recursively handle the unwrapped aggregation
+                        $aggregation = $innerAgg;
+                        break;
+                    }
+                }
             }
 
             // Handle both NestedAggregation (for properties/options) and TermsAggregation (for manufacturer)
