@@ -1,11 +1,11 @@
 {% sw_extends '@Storefront/storefront/component/listing/filter-panel.html.twig' %}
 
 {% block component_filter_panel_items %}
-    
+
     {% sw_include '@TorqShopwareCommon/storefront/component/listing/category-filter.html.twig' %}
 
     {% sw_include '@TorqShopwareCommon/storefront/component/listing/instock-filter.html.twig' %}
 
     {{ parent() }}
-    
+
 {% endblock %}

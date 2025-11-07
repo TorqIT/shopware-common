@@ -31,4 +31,28 @@
     margin-bottom: 0;
 }
 
+// Filter count styling
+.filter-option-count {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+}
+
+.filter-option-disabled {
+    opacity: 0.5;
+
+    .filter-multi-select-item-label {
+        color: #6c757d;
+        cursor: not-allowed;
+    }
+
+    .form-check-input:disabled {
+        cursor: not-allowed;
+    }
+
+    .filter-option-count {
+        color: #999;
+    }
+}
+
 @import "partials/quick-add-autocomplete";
