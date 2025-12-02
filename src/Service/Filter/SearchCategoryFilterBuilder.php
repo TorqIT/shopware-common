@@ -58,7 +58,7 @@ class SearchCategoryFilterBuilder
         $navId = $salesChannel->getNavigationCategoryId();
         
         $criteria = new Criteria([$navId]);
-        $criteria->addAssociation('children');
+        $criteria->addAssociation('children.children');
         $childrenAssociation = $criteria->getAssociation('children');
         $childrenAssociation->addFilter(new EqualsAnyFilter('id', array_values($categoryIds)));
         
