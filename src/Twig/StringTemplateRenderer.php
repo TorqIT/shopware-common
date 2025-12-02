@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Torq\Shopware\Common\Twig;
 
-use Shopware\Core\Framework\Adapter\Twig\Exception\StringTemplateRenderingException;
 use Shopware\Core\Framework\Context;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Twig\Environment;
@@ -54,7 +53,7 @@ class StringTemplateRenderer extends \Shopware\Core\Framework\Adapter\Twig\Strin
     }
 
     /**
-     * @throws StringTemplateRenderingException
+     * @throws \RuntimeException
      */
     public function render(string $templateSource, array $data, Context $context, bool $htmlEscape = true): string
     {
@@ -66,7 +65,7 @@ class StringTemplateRenderer extends \Shopware\Core\Framework\Adapter\Twig\Strin
         try {
             return $this->twig->render($name, $data);
         } catch (Error $error) {
-            throw new StringTemplateRenderingException($error->getMessage());
+            throw new \RuntimeException('Failed to render string template: ' . $error->getMessage(), 0, $error);
         }
     }
 
