@@ -122,6 +122,36 @@
             <helpText>If enabled, the quick add will use the advanced search instead of just a product number search.</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
-        
+
+    </card>
+
+    <card>
+        <title>Search Configuration</title>
+
+        <input-field type="single-select">
+            <name>searchFuzziness</name>
+            <label>Fuzzy Match Distance</label>
+            <defaultValue>1</defaultValue>
+            <helpText>Controls how closely search terms must match product data. "Disabled" requires exact matches. Higher values allow more character differences (e.g., "1 Character" allows "Foot" to match "Boot"). Recommended: Disabled for precise results. Shopware Default: 1</helpText>
+            <options>
+                <option>
+                    <id>-1</id>
+                    <name>Disabled (Exact Match)</name>
+                </option>
+                <option>
+                    <id>0</id>
+                    <name>Exact Match (Fuzzy Infrastructure)</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>1 Character Difference</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>2 Characters Difference</name>
+                </option>
+            </options>
+        </input-field>
+
     </card>
 </config>
