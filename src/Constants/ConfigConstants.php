@@ -16,6 +16,4 @@ class ConfigConstants
     public const QUICK_ADD_AUTOCOMPLETE_ENABLED = 'TorqShopwareCommon.config.quickAddAutocompleteEnabled';
     public const QUICK_ADD_STACKABLE_ENABLED = 'TorqShopwareCommon.config.quickAddStackableEnabled';
     public const QUICK_ADD_ADVANCED_SEARCH_ENABLED = 'TorqShopwareCommon.config.quickAddAdvancedSearchEnabled';
-    public const SEARCH_FUZZINESS = 'TorqShopwareCommon.config.searchFuzziness';
-    public const SEARCH_FUZZINESS_DISABLED = '-1';
 }

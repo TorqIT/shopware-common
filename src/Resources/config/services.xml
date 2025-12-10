@@ -165,14 +165,5 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
-        <!-- Fuzzy Search Decorator - Modifies or removes fuzziness from search queries based on system config -->
-        <service id="Torq\Shopware\Common\Elasticsearch\Product\FuzzySearchElasticsearchProductDecorator"
-            decorates="Shopware\Elasticsearch\Product\ElasticsearchProductDefinition"
-            decoration-priority="-100">
-            <argument type="service" id=".inner"/>
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="request_stack"/>
-        </service>
-
     </services>
 </container>
