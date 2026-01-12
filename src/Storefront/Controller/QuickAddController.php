@@ -38,23 +38,26 @@ class QuickAddController extends StorefrontController
 
         $criteria = new Criteria();
         $criteria->setLimit(20);
-        $criteria->addFilter(new MultiFilter(
-            MultiFilter::CONNECTION_OR,
-            [
-                new EqualsFilter('childCount', 0),
-                new EqualsFilter('childCount', null),
-            ]
-        ));
+        $criteria->addAssociation('manufacturer');
+        $criteria->addAssociation('cover.media');
+        $criteria->addAssociation('options.group');
+        $criteria->addAssociation('children.options.group');
 
         if ($advancedSearchEnabled) {
             $searchRequest = clone $request;
             $searchRequest->query->set('search', $term);
             $products = $this->productSearchRoute->load($searchRequest, $context, $criteria)->getListingResult()->getEntities();
         } else {
-            $criteria->addFilter(new ContainsFilter('productNumber', $term));
+            $criteria->addFilter(new MultiFilter(
+                MultiFilter::CONNECTION_OR,
+                [
+                    new ContainsFilter('productNumber', $term),
+                    new ContainsFilter('name', $term),
+                ]
+            ));
             $products = $this->salesChannelProductRepository->search($criteria, $context)->getEntities();
         }
 
-        return $this->renderStorefront('@Storefront/storefront/component/checkout/quick-add-autocomplete.html.twig', ['products' => $products->getElements()]);
+        return $this->renderStorefront('@TorqShopwareCommon/storefront/component/checkout/quick-add-autocomplete.html.twig', ['products' => $products->getElements()]);
     }
 }

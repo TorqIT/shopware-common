@@ -2,7 +2,11 @@
 
 {% block page_checkout_cart_add_product %}
     {% if config('TorqShopwareCommon.config.quickAddAutocompleteEnabled') === true %}
-        <div data-quick-add-autocomplete-plugin class="position-relative">
+        {% set urlPrefix = context.languageInfo.localeCode == 'fr-CA' ? '/fr/' : '/' %}
+        {% set dataQuickAddAutocompletePluginOptions = {
+            urlPrefix: urlPrefix
+        } %}
+        <div data-quick-add-autocomplete-plugin data-quick-add-autocomplete-plugin-options="{{ dataQuickAddAutocompletePluginOptions|json_encode }}" class="position-relative">
             {{ parent() }}
             <div id="quick-add-autocomplete-container" class="position-absolute w-100 z-3 overflow-auto" style="max-height:200px">
             </div>

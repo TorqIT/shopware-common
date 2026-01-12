@@ -10,7 +10,6 @@
         <form id="productDetailPageBuyProductForm" action="{{path('frontend.checkout.line-item.add')}}" method="post">
 
             {% block page_quick_add_autocomplete_form_hidden_fields %}
-            <input type="hidden" name="lineItems[{{ lineItemId }}][quantity]" value="1" aria-label="Quantity">
             <input type="hidden" name="redirectTo" value="frontend.checkout.cart.page">
             <input type="hidden" name="redirectParameters" data-redirect-parameters="true" value="{"productId":"{{ lineItemId }}"}" disabled="">
             <input type="hidden" name="lineItems[{{ lineItemId }}][id]" value="{{ lineItemId }}">
@@ -22,29 +21,43 @@
             {% endblock %}
 
             {% block page_quick_add_autocomplete_form_content %}
-                {% if advancedSearch %}                   
-                    <div class="row">
+                <div class="py-2 border-bottom">
+                    <div class="row align-items-center">
                         <div class="col-2">
                             {% if product.cover.media.url %}
-                                <img src="{{ product.cover.media.url }}" class="img-fluid" />
+                                <img src="{{ product.cover.media.url }}" class="img-fluid" alt="{{ product.translated.name }}" />
                             {% endif %}
                         </div>
-                        <div class="col-8">
-                            <div>{{ product.translated.name }}</div>
-                            <div>{{ product.calculatedPrice.unitPrice|currency }}</div>
-                            <div>{{ product.productNumber }}</div>
+                        <div class="col-6">
+                            <div class="font-weight-bold">{{ product.translated.name }}</div>
+                            <div class="text-muted small">{{ "quickAdd.sku"|trans }} {{ product.productNumber }}</div>
+                            {% if product.manufacturer %}
+                                <div class="text-muted small">{{ "quickAdd.supplier"|trans }} {{ product.manufacturer.translated.name }}</div>
+                            {% endif %}
+                            {% if product.options is not empty %}
+                                <div class="small mt-1">
+                                    {% for option in product.options %}
+                                        <span class="badge badge-light text-dark">{{ option.translated.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="col-2">
-                            <button class="btn text-left btn-quick-add-autocomplete" type="submit" title="Add to Cart" aria-label="Add to Cart">
-                                Add to Cart
+                            <input type="number"
+                                   class="form-control form-control-sm quick-add-quantity-input"
+                                   name="lineItems[{{ lineItemId }}][quantity]"
+                                   value="1"
+                                   min="1"
+                                   step="1"
+                                   aria-label="{{ "quickAdd.quantity"|trans }}">
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-primary btn-sm btn-block btn-quick-add-autocomplete" type="submit" title="{{ "quickAdd.addToCart"|trans }}" aria-label="{{ "quickAdd.addToCart"|trans }}">
+                                {{ "quickAdd.add"|trans }}
                             </button>
                         </div>
                     </div>
-                {% else %}
-                    <button class="btn w-100 text-left btn-quick-add-autocomplete" type="submit" title="Add to Cart" aria-label="Add to Cart">
-                        {{product.productNumber}}
-                    </button>
-                {% endif %}
+                </div>
             {% endblock %}
         </form>
         {% endblock %}

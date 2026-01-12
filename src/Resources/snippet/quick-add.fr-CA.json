@@ -1,0 +1,9 @@
+{
+    "quickAdd": {
+        "sku": "UGS:",
+        "supplier": "Fournisseur:",
+        "quantity": "Quantité",
+        "addToCart": "Ajouter au panier",
+        "add": "Ajouter"
+    }
+}
