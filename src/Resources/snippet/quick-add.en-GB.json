@@ -1,0 +1,9 @@
+{
+    "quickAdd": {
+        "sku": "SKU:",
+        "supplier": "Supplier:",
+        "quantity": "Quantity",
+        "addToCart": "Add to Cart",
+        "add": "Add"
+    }
+}
