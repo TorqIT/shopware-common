@@ -41,7 +41,6 @@ class QuickAddController extends StorefrontController
         $criteria->addAssociation('manufacturer');
         $criteria->addAssociation('cover.media');
         $criteria->addAssociation('options.group');
-        $criteria->addAssociation('children.options.group');
 
         if ($advancedSearchEnabled) {
             $searchRequest = clone $request;
