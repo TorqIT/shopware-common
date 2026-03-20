@@ -12,7 +12,7 @@ class DownloadFile
 {
     public static function downloadAsExcel(array $headers, array $data, string $filename): Response {
         $writer = WriterEntityFactory::createXLSXWriter();
-        $tmpXLSX = tempnam(sys_get_temp_dir(), '_export_');
+        $tmpXLSX = tempnam(sys_get_temp_dir(), '_export_') . '.xlsx';
         $writer->openToFile($tmpXLSX);
         $writer->addRow(WriterEntityFactory::createRowFromArray($headers));
         
