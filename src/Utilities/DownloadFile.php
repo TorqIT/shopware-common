@@ -26,7 +26,7 @@ class DownloadFile
         $contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
         $response = new Response($content ?: null, 200, ['Content-Type' => $contentType,
-                                                        'Content-Disposition' => 'filename=' . $filename]);
+                                                        'Content-Disposition' => 'attachment; filename="' . $filename . '"']);
         $response->setLastModified((new \DateTimeImmutable()));
 
         unlink($tmpXLSX);
