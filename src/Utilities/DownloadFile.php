@@ -12,7 +12,7 @@ class DownloadFile
 {
     public static function downloadAsExcel(array $headers, array $data, string $filename): Response {
         $writer = WriterEntityFactory::createXLSXWriter();
-        $tmpXLSX = tempnam(sys_get_temp_dir(), '_export_') . '.xlsx';
+        $tmpXLSX = tempnam(sys_get_temp_dir(), '_export_');
         $writer->openToFile($tmpXLSX);
         $writer->addRow(WriterEntityFactory::createRowFromArray($headers));
         
@@ -26,7 +26,7 @@ class DownloadFile
         $contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
         $response = new Response($content ?: null, 200, ['Content-Type' => $contentType,
-                                                        'Content-Disposition' => 'attachment; filename="' . $filename . '"']);
+                                                        'Content-Disposition' => 'filename=' . $filename]);
         $response->setLastModified((new \DateTimeImmutable()));
 
         unlink($tmpXLSX);
