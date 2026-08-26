@@ -30,7 +30,7 @@ use Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Commercial\B2B\EmployeeManagement\Entity\Employee\EmployeeEntity;
 use Shopware\Core\Framework\Validation\Exception\ConstraintViolationException;
-use Shopware\Commercial\B2B\EmployeeManagement\Domain\Login\EmployeeCartRestorer;
+use Shopware\Commercial\B2B\EmployeeManagement\Domain\Login\AbstractEmployeeCartTokenResolver;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
 use Torq\Shopware\Common\Checkout\Customer\SalesChannel\AbstractImitateEmployeeRoute;
 
@@ -53,7 +53,7 @@ class ImitateEmployeeRoute extends AbstractImitateEmployeeRoute
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly DataValidator $validator,
         private readonly EntityRepository $employeeRepository,
-        private readonly EmployeeCartRestorer $employeeCartRestorer,
+        private readonly AbstractEmployeeCartTokenResolver $employeeCartRestorer,
         private readonly SalesChannelContextPersister $salesChannelContextPersister,
         private readonly CartRestorer $restorer        
     ) {
