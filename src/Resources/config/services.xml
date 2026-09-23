@@ -157,12 +157,8 @@
             </call>
         </service>
 
-        <service id="Torq\Shopware\Common\Core\Content\Product\SalesChannel\Listing\Filter\PropertyListingFilterHandlerDecorator"
-            decorates="Shopware\Core\Content\Product\SalesChannel\Listing\Filter\PropertyListingFilterHandler">
-            <argument type="service" id="Doctrine\DBAL\Connection"/>
+        <service id="Torq\Shopware\Common\Subscriber\RestrictListingPropertiesSubscriber">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id=".inner"/>
-            <argument type="service" id="product.repository"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
