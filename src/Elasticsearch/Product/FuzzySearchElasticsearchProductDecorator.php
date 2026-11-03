@@ -112,6 +112,12 @@ class FuzzySearchElasticsearchProductDecorator extends AbstractElasticsearchDefi
                 if ($key === 'match' && isset($value)) {
                     foreach ($value as $field => &$params) {
                         if (is_array($params) && isset($params['fuzziness'])) {
+                            // Core sets 0 for tokens too short to fuzz (e.g. "50"). Making those fuzzy
+                            // expands each into dozens of terms per field and trips maxClauseCount (1024).
+                            if ((string) $params['fuzziness'] === '0') {
+                                continue;
+                            }
+
                             if ($fuzzinessConfig === ConfigConstants::SEARCH_FUZZINESS_DISABLED) {
                                 // Remove fuzziness parameter
                                 unset($params['fuzziness']);

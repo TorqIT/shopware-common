@@ -35,7 +35,7 @@ Shopware.Component.override('sw-customer-employee-card', {
             return false; s//this.businessPartnerCustomer.boundSalesChannel?.domains?.length === 1;
         },
         currentUser() {
-            return Shopware.State.get('session').currentUser;
+            return Shopware.Store.get('session').currentUser;
         },
     },
 
