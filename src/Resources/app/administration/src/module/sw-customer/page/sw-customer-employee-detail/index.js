@@ -51,7 +51,7 @@ Shopware.Component.override('sw-customer-employee-detail', {
             return this.businessPartnerCustomer.boundSalesChannel?.domains?.length === 1;
         },
         currentUser() {
-            return Shopware.State.get('session').currentUser;
+            return Shopware.Store.get('session').currentUser;
         },
     },
 
